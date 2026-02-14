@@ -1,6 +1,93 @@
-<html><head><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-<style>
-  :root { --primary: #e94560; --bg: #0f0f1b; --card: #1a1a2e; }
-  body { background: var(--bg); color: white; font-family: sans-serif; margin: 0; padding-bottom: 30px; }
-  .header { background: var(--card); padding: 15px;
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lukar Game Shop</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --main: #e94560; --dark: #0f0f1b; --card: #1a1a2e; --accent: #00d2ff; }
+        body { background: var(--dark); color: white; font-family: 'Pyidaungsu', 'Segoe UI', sans-serif; margin: 0; padding-bottom: 30px; }
+        .header { background: var(--card); padding: 15px; text-align: center; border-bottom: 3px solid var(--main); position: sticky; top: 0; z-index: 100; }
+        .banner { width: 92%; height: 130px; background: linear-gradient(135deg, #1a1a2e 0%, #e94560 100%); margin: 15px auto; border-radius: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 5px 15px rgba(0,0,0,0.4); text-align: center; }
+        .banner h2 { margin: 0; font-size: 20px; letter-spacing: 1px; }
+        .container { padding: 12px; }
+        .section { background: var(--card); padding: 15px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #333; }
+        .stitle { color: var(--main); font-size: 15px; font-weight: bold; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        input { width: 100%; padding: 12px; margin: 8px 0; background: #0c0c16; border: 1px solid #444; border-radius: 10px; color: white; outline: none; box-sizing: border-box; }
+        input:focus { border-color: var(--main); }
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .card { background: #252545; padding: 15px; border-radius: 12px; border: 1px solid #3d3d5d; text-align: center; transition: 0.2s; position: relative; }
+        .card.active { border-color: var(--main); background: rgba(233, 69, 96, 0.15); transform: translateY(-2px); }
+        .card i { font-size: 22px; color: var(--accent); margin-bottom: 8px; display: block; }
+        .price { display: block; color: #2ecc71; font-weight: bold; margin-top: 5px; font-size: 14px; }
+        .footer-btn { background: var(--main); color: white; width: 100%; padding: 16px; border: none; border-radius: 12px; font-weight: bold; font-size: 16px; margin-top: 10px; cursor: pointer; box-shadow: 0 4px 15px rgba(233, 69, 96, 0.3); }
+        .footer-btn:active { transform: scale(0.98); }
+        .upload-area { border: 2px dashed #444; border-radius: 10px; padding: 15px; text-align: center; margin-top: 10px; cursor: pointer; }
+        #preview { width: 100%; height: 150px; margin-top: 10px; border-radius: 8px; display: none; object-fit: contain; background: #000; }
+    </style>
+</head>
+<body>
+
+<div class="header"><h3>LUKAR GAME SHOP</h3></div>
+
+<div class="banner">
+    <h2>LUKAR SHOP</h2>
+    <p style="font-size: 12px; opacity: 0.8; margin-top: 5px;">💎 စျေးနှုန်းအချိုသာဆုံးနှင့် အမြန်ဆုံး 💎</p>
+</div>
+
+<div class="container">
+    <div class="section">
+        <div class="stitle"><i class="fas fa-id-card"></i> Player Information</div>
+        <input type="number" id="playerid" placeholder="Enter Player ID">
+        <input type="number" id="serverid" placeholder="Enter Server ID">
+    </div>
+
+    <div class="section">
+        <div class="stitle"><i class="fas fa-list"></i> Select Diamonds / Pass</div>
+        <div class="grid" id="items">
+            <div class="card" onclick="select(this,'Weekly Pass','6200')"><i class="fas fa-crown"></i>Weekly Pass<span class="price">6,200 Ks</span></div>
+            <div class="card" onclick="select(this,'86 Diamonds','5200')"><i class="fas fa-gem"></i>86 💎<span class="price">5,200 Ks</span></div>
+            <div class="card" onclick="select(this,'172 Diamonds','11000')"><i class="fas fa-gem"></i>172 💎<span class="price">11,000 Ks</span></div>
+            <div class="card" onclick="select(this,'257 Diamonds','15000')"><i class="fas fa-gem"></i>257 💎<span class="price">15,000 Ks</span></div>
+            <div class="card" onclick="select(this,'706 Diamonds','39500')"><i class="fas fa-gem"></i>706 💎<span class="price">39,500 Ks</span></div>
+            <div class="card" onclick="select(this,'Twilight Pass','32200')"><i class="fas fa-star"></i>Twilight Pass<span class="price">32,200 Ks</span></div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="stitle"><i class="fas fa-wallet"></i> Payment & Screenshot</div>
+        <p style="font-size: 13px; margin-bottom: 5px;">KPay / WavePay: <b>09776432409</b></p>
+        <div class="upload-area" onclick="document.getElementById('file').click()">
+            <i class="fas fa-cloud-upload-alt"></i> ပြေစာပုံတင်ရန်
+            <input type="file" id="file" accept="image/*" style="display:none" onchange="showPre(event)">
+        </div>
+        <img id="preview">
+    </div>
+
+    <button class="footer-btn" onclick="submitOrder()">အော်ဒါတင်မည်</button>
+</div>
+
+<script>
+    let selItem = "", selPrice = "";
+    function select(el, name, price) {
+        document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+        el.classList.add('active'); selItem = name; selPrice = price;
+    }
+    function showPre(e) {
+        let r = new FileReader();
+        r.onload = function() { let o = document.getElementById('preview'); o.src = r.result; o.style.display = "block"; };
+        r.readAsDataURL(e.target.files[0]);
+    }
+    function submitOrder() {
+        const id = document.getElementById('playerid').value;
+        const sid = document.getElementById('serverid').value;
+        if(!id || !sid || !selItem) { alert('အချက်အလက်များကို ပြည့်စုံအောင် ဖြည့်ပါဗျ'); return; }
+        
+        const msg = `🚀 *NEW ORDER: LUKAR SHOP*%0A━━━━━━━━━━━━━━━━%0A👤 *Player ID:* ${id} (${sid})%0A📦 *Item:* ${selItem}%0A💰 *Total:* ${selPrice} Ks%0A━━━━━━━━━━━━━━━━%0A_စစ်ဆေးပေးပါရန်!_`;
+        window.location.href = `https://t.me/myatbonek15_creator?text=${msg}`;
+    }
+</script>
+
+</body>
+</html>
