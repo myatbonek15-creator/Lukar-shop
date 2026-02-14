@@ -3,87 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lukar Game Shop - PUBG Mobile</title>
+    <title>Lukar Game Shop</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --main: #e94560; --dark: #121212; --card: #ffffff; --green: #2ecc71; --bg-gray: #f4f7f6; }
-        body { background: var(--bg-gray); color: #333; font-family: sans-serif; margin: 0; padding-bottom: 60px; }
-        
-        .header { background: #1a1a1a; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
-        .container { padding: 15px; }
-        
-        /* Category Section */
-        .cat-title { display: flex; align-items: center; gap: 10px; margin: 20px 0 10px; font-weight: bold; font-size: 15px; color: #1a1a1a; }
-        .cat-num { background: var(--main); color: white; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; }
-        .wait-time { font-size: 11px; color: #666; margin-bottom: 15px; display: block; }
+        :root { --main: #2ecc71; --dark: #121212; --card: #1e1e1e; --text: #ffffff; --accent: #e94560; }
+        body { background: var(--dark); color: var(--text); font-family: sans-serif; margin: 0; padding-bottom: 30px; }
 
-        /* Product Grid */
-        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-        .p-card { background: var(--card); border-radius: 12px; padding: 15px 10px; text-align: center; border: 1px solid #eee; position: relative; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .p-card:active { transform: scale(0.95); background: #f9f9f9; }
-        .p-card.active { border-color: var(--main); background: #fff5f6; }
-        .p-card img { width: 45px; margin-bottom: 8px; }
-        .p-name { display: block; font-size: 13px; font-weight: bold; margin-bottom: 5px; }
-        .p-price { display: block; color: var(--main); font-size: 14px; font-weight: bold; }
+        /* Login Screen */
+        #login-screen { height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
+        .login-card { background: #1a1a1a; padding: 40px 25px; border-radius: 20px; width: 100%; max-width: 380px; text-align: center; border: 1px solid #333; }
+        .l-input { width: 100%; padding: 15px; margin-bottom: 15px; background: #262626; border: 1px solid #444; border-radius: 10px; color: white; box-sizing: border-box; outline: none; }
+        .btn-login { width: 100%; padding: 15px; background: var(--main); border: none; border-radius: 10px; color: white; font-weight: bold; cursor: pointer; font-size: 16px; }
+
+        /* Main App Header */
+        #main-app { display: none; }
+        .header { background: #222; padding: 15px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #333; }
+        .bal-display { background: #333; padding: 8px 15px; border-radius: 8px; border: 1px solid #444; font-weight: bold; font-size: 14px; }
+
+        .container { padding: 15px; }
+        .cat-title { display: flex; align-items: center; gap: 10px; margin: 25px 0 15px; font-weight: bold; font-size: 16px; border-left: 4px solid var(--main); padding-left: 10px; }
         
-        /* Modal Style */
+        /* Product Grid */
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        .p-card { background: white; color: #333; border-radius: 12px; padding: 15px 10px; text-align: center; cursor: pointer; border: 1px solid #eee; position: relative; transition: 0.2s; }
+        .p-card:active { transform: scale(0.95); }
+        .p-card img { width: 45px; height: 45px; object-fit: contain; margin-bottom: 8px; }
+        .p-name { display: block; font-size: 13px; font-weight: bold; margin-bottom: 5px; height: 32px; overflow: hidden; }
+        .p-price { display: block; color: var(--main); font-weight: bold; font-size: 14px; }
+        .tag { position: absolute; top: 0; right: 0; background: var(--main); color: white; font-size: 9px; padding: 3px 8px; border-radius: 0 12px 0 12px; }
+
+        /* Modal Overlay */
         #modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; align-items: center; justify-content: center; }
-        .modal { background: white; width: 90%; max-width: 360px; border-radius: 15px; overflow: hidden; animation: zoom 0.2s; }
-        @keyframes zoom { from {transform: scale(0.8);} to {transform: scale(1);} }
-        .modal-header { background: #000; color: #fff; padding: 12px; text-align: center; font-weight: bold; }
-        .modal-body { padding: 20px; color: #333; }
-        .id-input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 10px; box-sizing: border-box; text-align: center; outline: none; }
-        .btn-check { width: 100%; background: #007bff; color: white; border: none; padding: 12px; border-radius: 8px; margin-bottom: 12px; font-weight: bold; }
-        #player-box { display: none; background: #e8f5e9; padding: 10px; border-radius: 8px; margin-bottom: 10px; text-align: center; color: #2e7d32; font-weight: bold; font-size: 14px; }
-        .info-box { background: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 10px; font-size: 13px; display: flex; justify-content: space-between; border: 1px solid #eee; }
-        .bal-box { background: #e3f2fd; color: #1976d2; padding: 12px; border-radius: 8px; text-align: center; font-weight: bold; margin-bottom: 15px; }
+        .modal { background: white; color: #333; width: 92%; max-width: 360px; border-radius: 15px; overflow: hidden; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .modal-header { background: black; color: white; padding: 15px; text-align: center; font-weight: bold; }
+        .modal-body { padding: 20px; }
+
+        .id-input-group { display: flex; gap: 8px; margin-bottom: 12px; }
+        .id-input-group input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; text-align: center; font-size: 14px; outline: none; }
+        .btn-check { width: 100%; background: #007bff; color: white; border: none; padding: 12px; border-radius: 8px; margin-bottom: 12px; font-weight: bold; cursor: pointer; }
+        
+        #name-result-box { display: none; background: #e8f5e9; padding: 12px; border-radius: 8px; margin-bottom: 15px; text-align: center; color: #2e7d32; font-weight: bold; border: 1px solid #c8e6c9; }
+        .info-row { background: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; font-size: 13px; border: 1px solid #eee; }
+        .balance-row { background: #e3f2fd; color: #1976d2; padding: 12px; border-radius: 8px; text-align: center; font-weight: bold; margin-bottom: 15px; border: 1px solid #bbdefb; }
+        
         .btn-group { display: flex; gap: 10px; }
-        .btn-cancel { flex: 1; background: #eee; border: none; padding: 12px; border-radius: 8px; color: #666; font-weight: bold; }
-        .btn-confirm { flex: 1; background: var(--main); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; }
+        .btn-cancel { flex: 1; background: #f5f5f5; border: none; padding: 14px; border-radius: 10px; font-weight: bold; color: #666; cursor: pointer; }
+        .btn-confirm { flex: 1; background: var(--main); border: none; padding: 14px; border-radius: 10px; font-weight: bold; color: white; cursor: pointer; }
     </style>
 </head>
 <body>
 
-<div class="header">
-    <i class="fas fa-chevron-left" onclick="history.back()"></i>
-    <b style="font-size: 16px;">PUBG GLOBAL UC</b>
-    <div style="font-size: 13px; background:#333; padding:5px 10px; border-radius:5px;">25000 ကျပ်</div>
+<div id="login-screen">
+    <div class="login-card">
+        <h1 style="margin: 0 0 10px 0;">Lukar Shop</h1>
+        <p style="color: #888; font-size: 13px; margin-bottom: 30px;">Login with your credentials</p>
+        <input type="text" id="login_id" class="l-input" placeholder="ဖုန်းနံပါတ် (09776432409)">
+        <input type="password" id="login_ps" class="l-input" placeholder="Password (lukar123)">
+        <button class="btn-login" onclick="doLogin()">LOGIN</button>
+    </div>
 </div>
 
-<div class="container">
-    <div class="cat-title"><span class="cat-num">1</span> UC Topup (Global)</div>
-    <span class="wait-time"><i class="far fa-clock"></i> Waiting Time: 0 Min (Instant)</span>
-    <div class="product-grid" id="uc-grid"></div>
-
-    <div class="cat-title" style="margin-top:30px;"><span class="cat-num">2</span> Prime & Subscription</div>
-    <span class="wait-time"><i class="far fa-clock"></i> Waiting Time: 5 Min</span>
-    <div class="product-grid">
-        <div class="p-card" onclick="openPop('Prime One Month', 5000)">
-            <img src="https://www.pubgmobile.com/images/event/prime/prime_icon1.png">
-            <span class="p-name">Prime (1 Month)</span>
-            <span class="p-price">5000 ကျပ်</span>
-        </div>
-        <div class="p-card" onclick="openPop('Prime Plus Month', 45000)">
-            <img src="https://www.pubgmobile.com/images/event/prime/prime_icon2.png">
-            <span class="p-name">Prime Plus</span>
-            <span class="p-price">45000 ကျပ်</span>
-        </div>
+<div id="main-app">
+    <div class="header">
+        <div style="font-size: 18px; font-weight: bold;">Lukar Shop</div>
+        <div class="bal-display" id="top-bal">0 ကျပ် +</div>
     </div>
 
-    <div class="cat-title" style="margin-top:30px;"><span class="cat-num">3</span> Special Packs (One Time Only)</div>
-    <div class="product-grid">
-        <div class="p-card" onclick="openPop('First Purchase', 5000)">
-            <span class="p-name">First Purchase</span>
-            <span class="p-price">5000 ကျပ်</span>
-        </div>
-        <div class="p-card" onclick="openPop('Material Pack', 15700)">
-            <span class="p-name">Material Pack</span>
-            <span class="p-price">15700 ကျပ်</span>
-        </div>
-        <div class="p-card" onclick="openPop('Mythic Emblem', 23000)">
-            <span class="p-name">Mythic Emblem</span>
-            <span class="p-price">23000 ကျပ်</span>
-        </div>
+    <div class="container">
+        <div class="cat-title">Mobile Legends Diamonds</div>
+        <div class="grid" id="ml-grid"></div>
+
+        <div class="cat-title" style="margin-top: 40px;">PUBG Global UC</div>
+        <div class="grid" id="pubg-grid"></div>
     </div>
 </div>
 
@@ -91,28 +83,31 @@
     <div class="modal">
         <div class="modal-header">အချက်အလက်များဖြည့်သွင်းပါ</div>
         <div class="modal-body">
-            <input type="number" id="pubg_id" class="id-input" placeholder="Enter Character ID">
-            <button class="btn-check" id="check-btn" onclick="checkPUBG()">ID စစ်ဆေးမည်</button>
+            <div class="id-input-group">
+                <input type="number" id="game_id" placeholder="Game Id">
+                <input type="number" id="server_id" placeholder="Server Id (ဂိမ်းအလိုက်)">
+            </div>
+            <button class="btn-check" id="check-btn" onclick="verifyID()">ID စစ်ဆေးမည်</button>
             
-            <div id="player-box">
-                <i class="fas fa-user-check"></i> Player: <span id="p-name-tag">---</span>
+            <div id="name-result-box">
+                <i class="fas fa-check-circle"></i> Player: <span id="player-name">---</span>
             </div>
 
-            <div class="info-box">
-                <span id="sel-item">Product</span>
-                <b id="sel-price">0 Ks</b>
+            <div class="info-row">
+                <span id="p_name">Product</span>
+                <b id="p_price">0 Ks</b>
             </div>
 
-            <div class="bal-box">
-                လက်ကျန်ငွေ = <span id="rem-bal">0</span> ကျပ်
+            <div class="balance-row">
+                လက်ကျန်ငွေ = <span id="rem_bal">0</span> ကျပ်
             </div>
 
-            <div style="font-size: 11px; color: #888; margin-bottom: 15px;">
-                <input type="checkbox" id="c_check"> အချက်အလက်များ မှန်ကန်ပါသည်
+            <div style="font-size: 11px; color: #666; margin-bottom: 15px; display: flex; align-items: center; gap: 5px;">
+                <input type="checkbox" id="confirm_check"> အချက်အလက်များ မှန်ကန်ပါတယ်
             </div>
 
             <div class="btn-group">
-                <button class="btn-cancel" onclick="closePop()">မဝယ်သေးပါ</button>
+                <button class="btn-cancel" onclick="closeModal()">မဝယ်သေးပါ</button>
                 <button class="btn-confirm" onclick="confirmOrder()">ဝယ်မည်</button>
             </div>
         </div>
@@ -120,95 +115,110 @@
 </div>
 
 <script>
-    const ucList = [
-        [60, 3900], [180, 12400], [325, 19200], [385, 23000], [660, 37400],
-        [720, 43200], [985, 55600], [1320, 73800], [1800, 92500], [3850, 190000], [8100, 373000]
+    // Configuration
+    const authUser = { id: "09776432409", ps: "lukar123", bal: 500000 };
+    let userBalance = 0;
+    let currentItemPrice = 0;
+
+    // Product Data
+    const mlProducts = [
+        {n: "86 Diamonds", p: 5200}, {n: "172 Diamonds", p: 11000}, 
+        {n: "257 Diamonds", p: 15000}, {n: "Weekly Pass", p: 6200}
+    ];
+    const pubgProducts = [
+        {n: "60 UC", p: 3900}, {n: "325 UC", p: 19200}, 
+        {n: "660 UC", p: 37400}, {n: "Prime Plus", p: 45000}
     ];
 
-    const grid = document.getElementById('uc-grid');
-    ucList.forEach(u => {
-        grid.innerHTML += `
-            <div class="p-card" onclick="openPop('${u[0]} UC', ${u[1]})">
-                <img src="https://www.pubgmobile.com/common/images/icon_uc.png">
-                <span class="p-name">${u[0]} UC</span>
-                <span class="p-price">${u[1].toLocaleString()} ကျပ်</span>
-            </div>
-        `;
-    });
-
-    let myBal = 25000; let currentP = 0;
-
-    function openPop(name, price) {
-        currentP = price;
-        document.getElementById('sel-item').innerText = name;
-        document.getElementById('sel-price').innerText = price.toLocaleString() + " Ks";
-        document.getElementById('rem-bal').innerText = (myBal - price).toLocaleString();
-        document.getElementById('modal-overlay').style.display = 'flex';
-        document.getElementById('player-box').style.display = 'none';
-        document.getElementById('check-btn').style.display = 'block';
+    // Load Products
+    function loadGrid(data, containerId, img) {
+        const grid = document.getElementById(containerId);
+        data.forEach(item => {
+            grid.innerHTML += `
+                <div class="p-card" onclick="openOrder('${item.n}', ${item.p})">
+                    <span class="tag">မစောင့်ရပါ</span>
+                    <img src="${img}">
+                    <span class="p-name">${item.n}</span>
+                    <span class="p-price">${item.p.toLocaleString()} ကျပ်</span>
+                </div>`;
+        });
     }
 
-    function checkPUBG() {
-        const id = document.getElementById('pubg_id').value;
-        if(!id) return alert("ID ရိုက်ပါ");
+    loadGrid(mlProducts, 'ml-grid', 'https://gameloot.in/wp-content/uploads/2020/10/Mobile-Legends-Bang-Bang-Diamond.png');
+    loadGrid(pubgProducts, 'pubg-grid', 'https://www.pubgmobile.com/common/images/icon_uc.png');
+
+    // Logic Functions
+    function doLogin() {
+        const id = document.getElementById('login_id').value;
+        const ps = document.getElementById('login_ps').value;
+        if(id === authUser.id && ps === authUser.ps) {
+            userBalance = authUser.bal;
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('main-app').style.display = 'block';
+            updateUIBalance();
+        } else { alert("Login အချက်အလက်မှားယွင်းနေပါတယ်"); }
+    }
+
+    function updateUIBalance() {
+        document.getElementById('top-bal').innerText = userBalance.toLocaleString() + " ကျပ် +";
+    }
+
+    function openOrder(name, price) {
+        currentItemPrice = price;
+        document.getElementById('p_name').innerText = name;
+        document.getElementById('p_price').innerText = price.toLocaleString() + " ကျပ်";
+        document.getElementById('rem_bal').innerText = (userBalance - price).toLocaleString();
+        document.getElementById('modal-overlay').style.display = 'flex';
+        document.getElementById('name-result-box').style.display = 'none';
+        document.getElementById('check-btn').style.display = 'block';
+        document.getElementById('confirm_check').checked = false;
+    }
+
+    function verifyID() {
+        const gid = document.getElementById('game_id').value;
+        if(!gid) return alert("ID ရိုက်ထည့်ပါ");
         document.getElementById('check-btn').innerText = "စစ်ဆေးနေသည်...";
         setTimeout(() => {
-            document.getElementById('player-box').style.display = 'block';
-            document.getElementById('p-name-tag').innerText = "PUBG_Player_" + id.slice(-4);
+            document.getElementById('name-result-box').style.display = 'block';
+            document.getElementById('player-name').innerText = "Lukar_Player_" + gid.slice(-4);
             document.getElementById('check-btn').style.display = 'none';
+            document.getElementById('check-btn').innerText = "ID စစ်ဆေးမည်";
         }, 800);
     }
 
-    function closePop() { document.getElementById('modal-overlay').style.display = 'none'; }
-    
+    function closeModal() { document.getElementById('modal-overlay').style.display = 'none'; }
 
-function confirmOrder() {
-    const isChecked = document.getElementById('c_check').checked;
-    const isVerified = document.getElementById('player-box').style.display === 'block';
+    function confirmOrder() {
+        const isChecked = document.getElementById('confirm_check').checked;
+        const isVerified = document.getElementById('name-result-box').style.display === 'block';
 
-    // ၁. ID အရင်စစ်ထားခြင်း ရှိမရှိ စစ်ဆေးခြင်း
-    if(!isVerified) {
-        alert("ID ကို အရင်ဆုံး စစ်ဆေးပေးပါဦးဗျ");
-        return;
+        if(!isVerified) return alert("ID ကို အရင်စစ်ဆေးပေးပါ");
+        if(!isChecked) return alert("မှန်ကန်ကြောင်း အမှန်ခြစ်ပေးပါ");
+
+        if (userBalance >= currentItemPrice) {
+            userBalance -= currentItemPrice;
+            updateUIBalance();
+            
+            const gid = document.getElementById('game_id').value;
+            const sid = document.getElementById('server_id').value || "N/A";
+            const pName = document.getElementById('p_name').innerText;
+            const pPrice = document.getElementById('p_price').innerText;
+
+            let message = "🚀 *NEW ORDER (PAID)*\n";
+            message += "━━━━━━━━━━━━━━━━\n";
+            message += "👤 Player ID: " + gid + "\n";
+            message += "🌍 Server ID: " + sid + "\n";
+            message += "📦 Item: " + pName + "\n";
+            message += "💰 Price: " + pPrice + "\n";
+            message += "🏦 Remaining: " + userBalance.toLocaleString() + " Ks\n";
+            message += "━━━━━━━━━━━━━━━━\n";
+            message += "✅ ငွေပေးချေမှု အောင်မြင်ပါသည်။";
+
+            window.open("https://t.me/official_lukar?text=" + encodeURIComponent(message), '_blank');
+            closeModal();
+            alert("အော်ဒါတင်ခြင်း အောင်မြင်ပါသည်။ Telegram သို့ ပို့ပေးပါမည်။");
+        } else { alert("လက်ကျန်ငွေ မလုံလောက်ပါ"); }
     }
-
-    // ၂. အချက်အလက် မှန်ကန်ကြောင်း အတည်ပြုချက် စစ်ဆေးခြင်း
-    if(!isChecked) {
-        alert("အချက်အလက် မှန်ကန်ကြောင်း အမှန်ခြစ်ပေးပါဦး");
-        return;
-    }
-
-    // ၃. လက်ကျန်ငွေ လုံလောက်မှု ရှိမရှိ စစ်ဆေးခြင်း
-    if (myBal >= currentP) {
-        // ငွေကို တစ်ခါတည်း နှုတ်လိုက်ခြင်း (Instant Deduction)
-        myBal -= currentP; 
-        
-        // Header မှာရှိတဲ့ ငွေပမာဏကို Update လုပ်ခြင်း
-        document.getElementById('top-bal').innerText = myBal.toLocaleString() + " ကျပ် +";
-        
-        // အော်ဒါအောင်မြင်ကြောင်း ပြသခြင်း
-        alert("အော်ဒါတင်ခြင်း အောင်မြင်ပါသည်။ \nလက်ကျန်ငွေ: " + myBal.toLocaleString() + " ကျပ်");
-        
-        // Admin ဆီသို့ Telegram မှ အော်ဒါအချက်အလက် ပို့ခြင်း
-        sendToTelegram(); 
-        
-        closePop();
-    } else {
-        // ငွေမလုံလောက်ပါက ငွေဖြည့်ရန် သတိပေးခြင်း
-        alert("အကောင့်ထဲမှာ ငွေမလုံလောက်တော့ပါဘူးဗျ။ ငွေအရင်ဖြည့်ပေးပါဦး။");
-    }
-}
-
-function sendToTelegram() {
-    const gid = document.getElementById('pubg_id').value;
-    const item = document.getElementById('sel-item').innerText;
-    const price = document.getElementById('sel-price').innerText;
-    
-    const message = `✅ *ORDER SUCCESS (PAID)*%0A━━━━━━━━━━━━━━━━%0A👤 Player ID: ${gid}%0A📦 Item: ${item}%0A💰 Paid: ${price}%0A🏦 Remaining Bal: ${myBal} Ks%0A━━━━━━━━━━━━━━━━`;
-    
-    // Telegram သို့ အလိုအလျောက် ပို့ပေးခြင်း
-    window.open(`https://t.me/official_lukar?text=${message}`, '_blank');
-}
 </script>
 </body>
 </html>
