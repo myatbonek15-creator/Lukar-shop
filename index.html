@@ -3,293 +3,252 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LUKAR Premium Game Shop</title>
+    <title>LUKAR SHOP | Premium Game Store</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { 
-            --primary: #00f2fe; 
-            --secondary: #4facfe;
-            --success: #00f2fe;
-            --bg: #0b0f1a; 
-            --card: rgba(255, 255, 255, 0.05); 
-            --text: #ffffff;
-        }
-        
-        body { 
-            background: var(--bg); 
-            color: var(--text); 
-            font-family: 'Inter', sans-serif; 
-            margin: 0; 
-            padding-bottom: 20px; 
-            overflow-x: hidden;
-        }
+        :root { --primary: #00f2fe; --bg: #030712; --text: #ffffff; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; padding-bottom: 80px; }
 
-        /* --- Animated Login Screen --- */
+        /* --- Login (Background Only Here) --- */
         #login-screen { 
-            display: none; height: 100vh; 
-            background: linear-gradient(-45deg, #0b0f1a, #1e293b, #004e92, #000428);
-            background-size: 400% 400%;
-            animation: gradientBG 10s ease infinite;
-            align-items: center; justify-content: center; position: fixed; width: 100%; top: 0; z-index: 1000; padding: 20px; box-sizing: border-box; 
+            display: flex; height: 100vh; width: 100%; position: fixed; top: 0; z-index: 2000;
+            background: url('https://i.postimg.cc/v8KvbfNS/IMG-1757.jpg') no-repeat center center;
+            background-size: cover; align-items: center; justify-content: center;
         }
-        
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+        .login-card { background: transparent; width: 85%; max-width: 350px; padding: 40px 20px; border: 2.5px solid var(--primary); border-radius: 35px; text-align: center; }
 
-        .login-card { 
-            background: rgba(255, 255, 255, 0.1); 
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            width: 100%; max-width: 380px; border-radius: 30px; padding: 40px; 
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-        }
-
-        .login-card h1 { font-size: 28px; font-weight: 900; margin-bottom: 5px; background: linear-gradient(to right, #00f2fe, #4facfe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .login-card p { color: #94a3b8; font-size: 14px; margin-bottom: 30px; }
-
-        .input-group { position: relative; margin-bottom: 20px; }
-        .input-group i { position: absolute; left: 15px; top: 18px; color: var(--primary); }
-        .l-input { width: 100%; padding: 15px 15px 15px 45px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; color: white; outline: none; transition: 0.3s; font-size: 15px; box-sizing: border-box; }
-        .l-input:focus { border-color: var(--primary); background: rgba(255,255,255,0.1); }
-
-        .btn-l-connect { width: 100%; padding: 16px; background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%); border: none; color: #0b0f1a; border-radius: 15px; font-weight: 800; cursor: pointer; font-size: 16px; box-shadow: 0 10px 20px rgba(79, 172, 254, 0.3); transition: 0.3s; }
-        .btn-l-connect:hover { transform: scale(1.02); box-shadow: 0 15px 30px rgba(79, 172, 254, 0.4); }
-
-        /* --- Main App UI --- */
+        /* --- Header & Screens --- */
         #main-app { display: none; }
-        .header { background: rgba(11, 15, 26, 0.8); backdrop-filter: blur(10px); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); position: sticky; top: 0; z-index: 100; }
-        .header-logo { font-size: 20px; font-weight: 900; letter-spacing: 1px; color: #fff; }
-        .header-logo span { color: var(--primary); }
-        
-        .bal-box { background: rgba(0, 242, 254, 0.1); padding: 8px 15px; border-radius: 50px; border: 1px solid var(--primary); color: var(--primary); font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        .header { background: #000; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1f2937; position: sticky; top: 0; z-index: 100; }
+        .bal-display { background: #1e293b; padding: 8px 12px; border-radius: 10px; font-weight: bold; border: 1px solid #334155; }
+        .screen { display: none; padding: 20px; animation: fadeIn 0.3s ease; }
+        .screen.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .container { padding: 20px; }
-        .section-title { font-size: 16px; font-weight: 600; color: #94a3b8; margin-bottom: 20px; }
-        
+        /* --- Game Grid & Prices --- */
         .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-        .game-card { background: var(--card); border-radius: 25px; border: 1px solid rgba(255,255,255,0.03); padding: 25px 15px; text-align: center; cursor: pointer; transition: 0.3s; }
-        .game-card:hover { transform: translateY(-8px); border-color: var(--primary); background: rgba(0, 242, 254, 0.05); }
-        .game-card img { width: 70px; height: 70px; border-radius: 20px; margin-bottom: 15px; }
-        .game-card b { font-size: 14px; color: #f1f5f9; }
+        .game-card { background: #111827; border-radius: 15px; padding: 20px; text-align: center; border: 1px solid #1f2937; cursor: pointer; }
+        .game-card img { width: 65px; height: 65px; border-radius: 12px; margin-bottom: 10px; }
+        .item-list { background: #111827; padding: 5px; border-radius: 15px; margin-top: 20px; border: 1px solid #1f2937; }
+        .price-row { display: flex; justify-content: space-between; padding: 18px; border-bottom: 1px solid #1f2937; cursor: pointer; }
 
-        /* --- Top-up Section --- */
-        #topup-screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0b0f1a; z-index: 200; padding: 20px; box-sizing: border-box; overflow-y: auto; }
-        .pay-card { background: rgba(255,255,255,0.05); border-radius: 20px; padding: 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.05); }
-        .pay-card b { color: var(--primary); font-size: 18px; }
-        .pay-name { color: #00f2fe; font-size: 14px; font-weight: 700; display: block; margin-top: 5px; }
-        .btn-copy { background: var(--primary); border: none; color: #0b0f1a; padding: 10px 15px; border-radius: 12px; font-weight: 800; cursor: pointer; font-size: 12px; }
+        /* --- White Purchase Modal (Screenshot Style) --- */
+        #modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1500; align-items: center; justify-content: center; padding: 15px; }
+        .modal { background: #ffffff; color: #333; width: 100%; max-width: 400px; border-radius: 15px; overflow: hidden; }
+        .modal-header { background: #000; color: #fff; padding: 15px; text-align: center; font-weight: bold; }
+        .modal-body { padding: 20px; }
+        .input-box { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; margin: 8px 0 15px; outline: none; }
+        .row-info { display: flex; gap: 10px; margin: 15px 0; }
+        .info-box { flex: 1; padding: 12px; background: #f1f5f9; border-radius: 8px; text-align: center; font-weight: bold; font-size: 13px; color: #000; }
+        .balance-box { background: #e0e7ff; color: #1e3a8a; padding: 12px; border-radius: 8px; text-align: center; font-weight: bold; margin-bottom: 15px; }
+        .check-group { display: flex; align-items: center; gap: 8px; color: #ef4444; font-size: 13px; font-weight: bold; }
+        .modal-footer { display: flex; gap: 10px; padding: 0 20px 20px; }
+        .btn { flex: 1; padding: 14px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .btn-cancel { background: #fff; border: 1.5px solid #3b82f6; color: #3b82f6; }
+        .btn-buy { background: #22c55e; color: #fff; }
 
-        .upload-box { border: 2px dashed rgba(255,255,255,0.1); padding: 30px; text-align: center; margin: 25px 0; border-radius: 20px; background: rgba(255,255,255,0.02); cursor: pointer; }
-        #preview-img { max-width: 100%; max-height: 220px; display: none; border-radius: 15px; margin-top: 15px; border: 2px solid var(--primary); }
+        /* --- Topup Screenshot Section --- */
+        .file-upload { 
+            background: #1e293b; border: 2px dashed #334155; padding: 20px; 
+            border-radius: 15px; text-align: center; cursor: pointer; margin-bottom: 20px;
+        }
+        .file-upload i { font-size: 30px; color: var(--primary); margin-bottom: 10px; }
+        #preview-img { width: 100%; border-radius: 10px; display: none; margin-top: 10px; }
 
-        /* --- Modal Styling --- */
-        #modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 500; align-items: center; justify-content: center; padding: 15px; }
-        .modal { background: #ffffff; color: #1e293b; width: 100%; max-width: 400px; border-radius: 30px; padding: 30px; max-height: 85vh; overflow-y: auto; position: relative; }
-        .price-cat { font-weight: 800; padding: 10px; color: #4facfe; background: #f0f9ff; margin: 15px 0 10px; border-radius: 10px; text-align: center; font-size: 12px; }
-        .price-item { border: 1px solid #f1f5f9; padding: 15px; border-radius: 15px; display: flex; justify-content: space-between; cursor: pointer; margin-bottom: 8px; font-weight: 700; transition: 0.2s; }
-        .price-item.selected { background: #0b0f1a; color: white; border-color: #0b0f1a; }
-        
-        .id-input { width: 100%; padding: 15px; border: 2px solid #f1f5f9; border-radius: 15px; margin-bottom: 10px; text-align: center; outline: none; font-size: 16px; font-weight: 700; box-sizing: border-box; }
-        
-        .btn-buy-now { width: 100%; padding: 18px; background: #0b0f1a; border: none; color: white; border-radius: 18px; font-weight: 800; cursor: pointer; font-size: 16px; margin-top: 10px; }
-
-        .fade-in { animation: fadeIn 0.4s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* --- Nav Bar --- */
+        .nav-bar { position: fixed; bottom: 0; width: 100%; background: #000; display: flex; justify-content: space-around; padding: 15px 0 25px; border-top: 1px solid #1f2937; }
+        .nav-item { color: #64748b; font-size: 24px; flex: 1; text-align: center; }
+        .nav-item.active { color: var(--primary); }
     </style>
 </head>
 <body>
 
 <div id="login-screen">
-    <div class="login-card fade-in">
-        <h1>LUKAR SHOP</h1>
-        <p>Your Favorite Game Store</p>
-        
-        <div class="input-group">
-            <i class="fas fa-phone"></i>
-            <input type="text" id="login_id" class="l-input" placeholder="Phone (09776432409)">
-        </div>
-        
-        <div class="input-group">
-            <i class="fas fa-lock"></i>
-            <input type="password" id="login_ps" class="l-input" placeholder="Password (lukar123)">
-        </div>
-        
-        <button class="btn-l-connect" onclick="doLogin()">GET STARTED</button>
-        <div style="margin-top: 20px; font-size: 12px; color: #94a3b8;">Created by Lukar Team</div>
+    <div class="login-card">
+        <h1 style="color:var(--primary); font-weight:900;">LUKAR SHOP</h1>
+        <input type="text" id="login_id" style="width:100%; padding:15px; background:rgba(0,0,0,0.5); border:1.5px solid #fff; border-radius:15px; color:white; margin-bottom:15px;" placeholder="Phone (09776432409)">
+        <input type="password" id="login_ps" style="width:100%; padding:15px; background:rgba(0,0,0,0.5); border:1.5px solid #fff; border-radius:15px; color:white; margin-bottom:25px;" placeholder="Password (lukar123)">
+        <button onclick="doLogin()" style="width:100%; padding:16px; background:var(--primary); border:none; border-radius:15px; font-weight:900;">LOGIN</button>
     </div>
 </div>
 
 <div id="main-app">
     <div class="header">
-        <div class="header-logo">LUKAR<span>SHOP</span></div>
-        <div class="bal-box" onclick="showTopup()">
-            <i class="fas fa-plus-circle"></i> <span id="display-bal">0</span> Ks
-        </div>
+        <div style="font-weight:900; font-size:20px;">LUKAR SHOP</div>
+        <div class="bal-display" onclick="switchScreen('settings')"><span id="header-bal">0</span> Ks +</div>
     </div>
 
-    <div class="container fade-in">
-        <div class="section-title">CHOOSE GAME</div>
+    <div id="home-screen" class="screen active">
         <div class="grid">
-            <div class="game-card" onclick="openOrder('MLBB')">
+            <div class="game-card" onclick="showPrices('MLBB')">
                 <img src="https://gameloot.in/wp-content/uploads/2020/10/Mobile-Legends-Bang-Bang-Diamond.png">
-                <b>MLBB DIAMOND</b>
+                <br><b>MLBB</b>
             </div>
-            <div class="game-card" onclick="openOrder('PUBG')">
+            <div class="game-card" onclick="showPrices('PUBG')">
                 <img src="https://www.pubgmobile.com/common/images/icon_uc.png">
-                <b>PUBG GLOBAL UC</b>
+                <br><b>PUBG UC</b>
             </div>
         </div>
-    </div>
-</div>
-
-<div id="topup-screen" class="fade-in">
-    <div onclick="hideTopup()" style="margin-bottom:30px; cursor:pointer; font-weight:700; color:var(--primary);">
-        <i class="fas fa-chevron-left"></i> BACK
-    </div>
-    
-    <div class="pay-card">
-        <div>
-            <b>KPay: 09776432409</b><br>
-            <span class="pay-name">Myat Bone Khant</span>
+        <div id="price-menu" style="display:none; margin-top:25px;">
+            <h3 id="game-title" style="color:var(--primary); margin-left:5px;">Item Menu</h3>
+            <div class="item-list" id="items-container"></div>
         </div>
-        <button class="btn-copy" onclick="copyNum('09776432409')">COPY</button>
     </div>
 
-    <div class="pay-card">
-        <div>
-            <b>Wave: 09776432409</b><br>
-            <span class="pay-name">Myat Bone Khant</span>
+    <div id="settings-screen" class="screen">
+        <h3>My Account</h3>
+        <div style="background:#111827; padding:25px; border-radius:20px; border:1.5px solid var(--primary); margin-bottom:20px;">
+            <div style="font-size:12px; opacity:0.6;">Current Balance</div>
+            <div style="font-size:32px; font-weight:900; color:var(--primary);"><span id="set-bal">0</span> Ks</div>
         </div>
-        <button class="btn-copy" onclick="copyNum('09776432409')">COPY</button>
+        <button onclick="switchScreen('topup')" style="width:100%; padding:18px; background:#111827; border:none; border-radius:15px; color:white; margin-bottom:12px; text-align:left;"><i class="fas fa-wallet"></i> Deposit Funds</button>
+        <button onclick="doLogout()" style="width:100%; padding:18px; background:#111827; border:none; border-radius:15px; color:#ff4d4d; text-align:left;"><i class="fas fa-sign-out-alt"></i> Logout</button>
     </div>
 
-    <p style="font-size:13px; color:#94a3b8; margin-top:20px;">Upload Payment Screenshot</p>
-    <input type="file" id="file-input" style="display: none;" accept="image/*" onchange="previewScreenshot(event)">
-    <div class="upload-box" onclick="document.getElementById('file-input').click()">
-        <div id="upload-text">
-            <i class="fas fa-cloud-upload-alt" style="font-size:35px; color:var(--primary);"></i><br>
-            <span style="display:block; margin-top:10px; font-weight:700;">Select Image</span>
+    <div id="topup-screen" class="screen">
+        <div onclick="switchScreen('settings')" style="margin-bottom:20px; color:var(--primary); cursor:pointer;"><i class="fas fa-arrow-left"></i> BACK</div>
+        <h3>Top Up Wallet</h3>
+        <div style="background:#111827; padding:15px; border-radius:15px; margin-bottom:20px; border:1px solid #1f2937;">
+            <p style="margin:0 0 5px 0; font-size:13px; color:#94a3b8;">KPay / Wave</p>
+            <b style="font-size:18px;">09776432409</b><br>
+            <span style="color:var(--primary);">Name: Myat Bone Khant</span>
         </div>
-        <img id="preview-img">
+
+        <label style="display:block; margin-bottom:10px;">ငွေဖြည့်မည့်ပမာဏ (Ks)</label>
+        <input type="number" id="top-amt" class="input-box" style="background:#000; color:white; border-color:#334155;" placeholder="Amount">
+        
+        <label style="display:block; margin-bottom:10px;">ငွေလွှဲပြေစာ (Screenshot)</label>
+        <div class="file-upload" onclick="document.getElementById('file-input').click()">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <p id="file-text" style="margin:0; font-size:13px;">ပုံရွေးချယ်ရန် နှိပ်ပါ</p>
+            <img id="preview-img">
+        </div>
+        <input type="file" id="file-input" hidden accept="image/*" onchange="previewFile()">
+
+        <button onclick="processTopup()" style="width:100%; padding:18px; background:var(--primary); border:none; border-radius:15px; font-weight:900; color:black;">DEPOSIT REQUEST</button>
     </div>
 
-    <input type="number" id="topup-amount" class="l-input" placeholder="Amount (ဥပမာ - 5000)" style="padding-left:15px; margin-bottom:20px;">
-    <button class="btn-l-connect" onclick="processTopup()">အတည်ပြုမည်</button>
+    <div class="nav-bar">
+        <div class="nav-item active" id="nav-home" onclick="switchScreen('home')"><i class="fas fa-th-large"></i></div>
+        <div class="nav-item" id="nav-settings" onclick="switchScreen('settings')"><i class="fas fa-user-circle"></i></div>
+    </div>
 </div>
 
 <div id="modal-overlay">
-    <div class="modal fade-in">
-        <h3 id="m_title" style="text-align:center; margin-bottom: 20px;">Select Plan</h3>
-        <input type="number" id="g_id" class="id-input" placeholder="Enter Player ID">
-        <input type="number" id="s_id" class="id-input" placeholder="Server ID (Optional)">
-        <div id="price-options"></div>
-        <button class="btn-buy-now" onclick="confirmOrder()">BUY NOW</button>
-        <button onclick="document.getElementById('modal-overlay').style.display='none'" style="border:none; background:none; margin-top:15px; width:100%; color:#94a3b8; font-weight:700; cursor:pointer;">CANCEL</button>
+    <div class="modal">
+        <div class="modal-header">အချက်အလက်များဖြည့်သွင်းပါ</div>
+        <div class="modal-body">
+            <label>Game ID</label>
+            <input type="number" id="game_id" class="input-box" placeholder="ID ရိုက်ထည့်ပါ">
+            <div class="row-info">
+                <div class="info-box" id="item_name">-</div>
+                <div class="info-box" id="item_price">0 Ks</div>
+            </div>
+            <div class="balance-box">လက်ကျန်ငွေ = <span id="modal-bal">0</span> Ks</div>
+            <div class="check-group"><input type="checkbox" id="confirm_check"><label for="confirm_check">အချက်အလက်များမှန်ကန်ပါတယ်</label></div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-cancel" onclick="closeModal()">မဝယ်သေးပါ</button>
+            <button class="btn btn-buy" onclick="confirmPurchase()">ဝယ်မည်</button>
+        </div>
     </div>
 </div>
 
 <script>
     const auth = { id: "09776432409", ps: "lukar123" };
-    let balance = parseInt(localStorage.getItem("lukar_bal")) || 0;
-    let selectedPrice = 0, selectedName = "";
+    let balance = parseInt(localStorage.getItem("lukar_bal")) || 19840;
 
     const pricesData = {
         'MLBB': [
-            { cat: "PASSES" },
-            { n: "Weekly pass", p: 6200 }, { n: "Twilight pass", p: 32200 },
-            { cat: "DIAMONDS" },
-            { n: "11 Diamonds", p: 1000 }, { n: "22 Diamonds", p: 2000 }, { n: "33 Diamonds", p: 2600 },
-            { n: "44 Diamonds", p: 3500 }, { n: "56 Diamonds", p: 4300 }, { n: "86 Diamonds", p: 5200 },
-            { n: "172 Diamonds", p: 11000 }, { n: "257 Diamonds", p: 15000 }, { n: "343 Diamonds", p: 21000 },
-            { n: "429 Diamonds", p: 24400 }, { n: "515 Diamonds", p: 30000 }, { n: "600 Diamonds", p: 35200 },
-            { n: "706 Diamonds", p: 39500 }, { n: "963 Diamonds", p: 56300 }, { n: "1049 Diamonds", p: 58500 },
-            { n: "1135 Diamonds", p: 64000 }, { n: "2195 Diamonds", p: 115900 }, { n: "3688 Diamonds", p: 191800 },
-            { n: "5532 Diamonds", p: 294500 }, { n: "9288 Diamonds", p: 495900 },
-            { cat: "DOUBLE DIA (LIMIT 1)" },
-            { n: "50+50 Diamonds", p: 3500 }, { n: "150+150 Diamonds", p: 10700 }, { n: "250+250 Diamonds", p: 15000 }, { n: "500+500 Diamonds", p: 32800 }
+            {n:"11 Diamonds", p:550}, {n:"28 Diamonds", p:1350}, {n:"56 Diamonds", p:2700}, {n:"86 Diamonds", p:4100},
+            {n:"172 Diamonds", p:8200}, {n:"257 Diamonds", p:12300}, {n:"Weekly Pass", p:5500},
+            {n:"429 Diamonds", p:20500}, {n:"706 Diamonds", p:32000}, {n:"1412 Diamonds", p:64000},
+            {n:"2195 Diamonds", p:95000}, {n:"5000 Diamonds", p:210000}
         ],
         'PUBG': [
-            { cat: "GLOBAL UC" },
-            { n: "60 UC", p: 3900 }, { n: "180 UC", p: 12400 }, { n: "325 UC", p: 19200 }, { n: "385 UC", p: 23000 },
-            { n: "660 UC", p: 37400 }, { n: "720 UC", p: 43200 }, { n: "985 UC", p: 55600 }, { n: "1320 UC", p: 73800 },
-            { n: "1800 UC", p: 92500 }, { n: "3850 UC", p: 190000 }, { n: "8100 UC", p: 373000 },
-            { cat: "SPECIAL PACKS" },
-            { n: "Prime Month", p: 5000 }, { n: "Prime Plus Month", p: 45000 },
-            { n: "First Purchase Pack", p: 5000 }, { n: "Material Pack", p: 15700 }, { n: "Mythic Emblem Pack", p: 23000 }
+            {n:"60 UC", p:3530}, {n:"120 UC", p:7000}, {n:"325 UC", p:18480}, {n:"660 UC", p:36920},
+            {n:"1800 UC", p:92000}, {n:"3850 UC", p:195000}, {n:"8100 UC", p:380000},
+            {n:"RP Upgrade", p:19800}, {n:"Elite Upgrade", p:48000}
         ]
     };
 
-    window.onload = function() {
-        if(localStorage.getItem("isLogged") === "true") showMain();
-        else document.getElementById('login-screen').style.display = 'flex';
-    };
+    window.onload = () => { if(localStorage.getItem("isLogged")) showMain(); };
 
     function doLogin() {
-        const id = document.getElementById('login_id').value;
-        const ps = document.getElementById('login_ps').value;
-        if(id === auth.id && ps === auth.ps) {
+        if(document.getElementById('login_id').value === auth.id && document.getElementById('login_ps').value === auth.ps) {
             localStorage.setItem("isLogged", "true"); showMain();
-        } else { alert("အချက်အလက်မှားယွင်းနေပါသည်"); }
+        } else alert("Invalid ID/PS");
     }
 
-    function showMain() { document.getElementById('login-screen').style.display='none'; document.getElementById('main-app').style.display='block'; updateUI(); }
-    function showTopup() { document.getElementById('topup-screen').style.display='block'; }
-    function hideTopup() { document.getElementById('topup-screen').style.display='none'; }
-    function copyNum(n) { navigator.clipboard.writeText(n); alert("နံပါတ်ကူးယူပြီးပါပြီ"); }
+    function showMain() {
+        document.getElementById('login-screen').style.display='none';
+        document.getElementById('main-app').style.display='block';
+        updateUI();
+    }
 
-    function previewScreenshot(e) {
+    function doLogout() { localStorage.removeItem("isLogged"); location.reload(); }
+
+    function switchScreen(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.getElementById(id + '-screen').classList.add('active');
+        if(id !== 'topup') document.getElementById('nav-' + id).classList.add('active');
+    }
+
+    function showPrices(game) {
+        const container = document.getElementById('items-container');
+        document.getElementById('game-title').innerText = game + " စျေးနှုန်းများ";
+        document.getElementById('price-menu').style.display = 'block';
+        container.innerHTML = "";
+        pricesData[game].forEach(i => {
+            const row = document.createElement('div');
+            row.className = "price-row";
+            row.innerHTML = `<span>${i.n}</span><span style="color:var(--primary); font-weight:bold;">${i.p.toLocaleString()} Ks</span>`;
+            row.onclick = () => {
+                document.getElementById('item_name').innerText = i.n;
+                document.getElementById('item_price').innerText = i.p.toLocaleString() + " Ks";
+                window.selPrice = i.p; window.selName = i.n;
+                document.getElementById('modal-overlay').style.display = 'flex';
+            };
+            container.appendChild(row);
+        });
+        window.scrollTo({top: document.body.scrollHeight, behavior:'smooth'});
+    }
+
+    function previewFile() {
+        const preview = document.getElementById('preview-img');
+        const file = document.getElementById('file-input').files[0];
         const reader = new FileReader();
-        reader.onload = function() { 
-            const img = document.getElementById('preview-img');
-            img.src = reader.result; img.style.display = 'inline-block';
-            document.getElementById('upload-text').style.display = 'none';
-        };
-        reader.readAsDataURL(e.target.files[0]);
+        reader.onloadend = () => { preview.src = reader.result; preview.style.display = 'block'; document.getElementById('file-text').innerText = "ပုံရွေးချယ်ပြီးပါပြီ"; }
+        if(file) reader.readAsDataURL(file);
     }
 
     function processTopup() {
-        const amt = document.getElementById('topup-amount').value;
+        const amt = document.getElementById('top-amt').value;
         const file = document.getElementById('file-input').files[0];
-        if(!amt || !file) return alert("ငွေပမာဏနှင့် Screenshot ထည့်ပါ");
-        balance += parseInt(amt); localStorage.setItem("lukar_bal", balance); updateUI();
-        alert("ငွေဖြည့်သွင်းမှု အောင်မြင်ပါသည်။"); hideTopup();
+        if(!amt || !file) return alert("ပမာဏ နှင့် ပြေစာပုံ ထည့်ပေးပါ");
+        alert("ငွေဖြည့်သွင်းမှု တောင်းဆိုချက် ပေးပို့ပြီးပါပြီ။ ခဏအတွင်း ဖြည့်သွင်းပေးပါမည်။");
+        window.open(`https://t.me/official_lukar?text=Deposit Request: ${amt} Ks`, '_blank');
+        switchScreen('settings');
     }
 
-    function openOrder(game) {
-        document.getElementById('m_title').innerText = game + " စျေးနှုန်းများ";
-        const listDiv = document.getElementById('price-options'); listDiv.innerHTML = ""; selectedPrice = 0;
-        pricesData[game].forEach(item => {
-            if(item.cat) {
-                const h = document.createElement('div'); h.className = "price-cat"; h.innerText = item.cat; listDiv.appendChild(h);
-            } else {
-                const d = document.createElement('div'); d.className = "price-item";
-                d.innerHTML = `<span>${item.n}</span> <span>${item.p.toLocaleString()} Ks</span>`;
-                d.onclick = () => { 
-                    document.querySelectorAll('.price-item').forEach(el=>el.classList.remove('selected')); 
-                    d.classList.add('selected'); selectedPrice=item.p; selectedName=item.n; 
-                };
-                listDiv.appendChild(d);
-            }
-        });
-        document.getElementById('modal-overlay').style.display = 'flex';
+    function closeModal() { document.getElementById('modal-overlay').style.display = 'none'; }
+
+    function confirmPurchase() {
+        const gid = document.getElementById('game_id').value;
+        if(!gid || !document.getElementById('confirm_check').checked) return alert("Fill ID & Confirm");
+        if(balance < window.selPrice) return alert("Low Balance");
+        balance -= window.selPrice; localStorage.setItem("lukar_bal", balance);
+        updateUI(); closeModal();
+        window.open(`https://t.me/official_lukar?text=New Order: ${window.selName}%0AID: ${gid}`, '_blank');
     }
 
-    function confirmOrder() {
-        const gid = document.getElementById('g_id').value;
-        if(selectedPrice === 0 || !gid) return alert("Plan နှင့် ID ကို အရင်ရွေးချယ်ပါ");
-        if(balance < selectedPrice) return alert("လက်ကျန်ငွေ မလုံလောက်ပါ");
-        
-        balance -= selectedPrice; localStorage.setItem("lukar_bal", balance); updateUI();
-        let msg = `🔥 *NEW ORDER*\nItem: ${selectedName}\nID: ${gid}\nBalance: ${balance.toLocaleString()} Ks`;
-        window.open("https://t.me/official_lukar?text=" + encodeURIComponent(msg), '_blank');
-        document.getElementById('modal-overlay').style.display = 'none';
+    function updateUI() {
+        const b = balance.toLocaleString();
+        document.getElementById('header-bal').innerText = b;
+        document.getElementById('set-bal').innerText = b;
+        document.getElementById('modal-bal').innerText = b;
     }
-
-    function updateUI() { document.getElementById('display-bal').innerText = balance.toLocaleString(); }
 </script>
 </body>
 </html>
