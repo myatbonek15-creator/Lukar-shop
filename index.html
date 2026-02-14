@@ -1,18 +1,99 @@
-<html><head><meta name="viewport" content="width=device-width,initial-scale=1.0"><style>
-body{background:#0f0f0f;color:white;font-family:sans-serif;padding:0;margin:0}
-.header{text-align:center;padding:25px;background:#1a1a1a;border-bottom:3px solid #e94560}
-.item-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;padding:20px;margin-bottom:80px}
-.product-card{background:#1a1a1a;padding:12px;border-radius:15px;border:1px solid #333;text-align:center}
-.product-img{background:#333;height:100px;border-radius:10px;margin-bottom:10px;display:flex;align-items:center;justify-content:center;font-size:35px}
-.price{color:#2ecc71;font-weight:bold;margin:10px 0;font-size:18px}
-.buy-btn{background:#e94560;color:white;padding:12px;border-radius:10px;text-decoration:none;display:block;font-size:14px;font-weight:bold}
-.footer-nav{position:fixed;bottom:0;left:0;width:100%;background:#1a1a1a;display:flex;justify-content:space-around;padding:18px;border-top:1px solid #333}
-.footer-nav a{color:white;text-decoration:none;font-size:15px}
+<html><head><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<style>
+  body{background:#0f0f0f;color:white;font-family:sans-serif;margin:0;padding:0}
+  .header{background:#1a1a1a;padding:20px;text-align:center;border-bottom:3px solid #e94560}
+  .container{padding:15px;max-width:600px;margin:auto}
+  .section{background:#1a1a1a;padding:15px;border-radius:12px;margin-bottom:20px;border:1px solid #333}
+  h3{margin-top:0;color:#e94560;font-size:18px;border-left:4px solid #e94560;padding-left:10px}
+  input{width:100%;padding:12px;margin:8px 0;background:#333;border:1px solid #444;border-radius:8px;color:white;box-sizing:border-box}
+  .price-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .price-card{background:#252525;padding:12px;border-radius:8px;text-align:center;border:1px solid #444;cursor:pointer;transition:0.3s}
+  .price-card.active{border-color:#e94560;background:#2d1b20;transform:scale(0.95)}
+  .btn-submit{background:#e94560;color:white;width:100%;padding:15px;border:none;border-radius:8px;font-weight:bold;font-size:16px;margin-top:10px;cursor:pointer}
+  .preview-box{width:100%;height:150px;background:#333;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-top:10px;border:2px dashed #555;background-size:contain;background-repeat:no-repeat;background-position:center}
+  .note{font-size:12px;color:#ffbd00;margin-bottom:10px;display:block}
 </style></head><body>
-<div class="header"><h1>Lukar Shop</h1><p>ပစ္စည်းများကို စျေးနှုန်းချိုသာစွာ ဝယ်ယူနိုင်ပါသည်</p></div>
-<div class="item-grid">
-  <div class="product-card"><div class="product-img">💎</div><div>MLBB Diamond</div><div class="price">၅,၀၀၀ Ks</div><a href="#" class="buy-btn">ဝယ်ယူမည်</a></div>
-  <div class="product-card"><div class="product-img">🎮</div><div>PUBG UC</div><div class="price">၁၀,၀၀၀ Ks</div><a href="#" class="buy-btn">ဝယ်ယူမည်</a></div>
+
+<div class="header"><h1>LUKAR GAME SHOP</h1><p>Fast & Reliable Top-up</p></div>
+
+<div class="container">
+  <div class="section">
+    <h3>၁။ Player ID & Server</h3>
+    <input type="text" id="gid" placeholder="Game ID (ဥပမာ- 12345678)">
+    <input type="text" id="sid" placeholder="Server ID (ဥပမာ- 1234)">
+  </div>
+
+  <div class="section">
+    <h3>၂။ Special Passes</h3>
+    <div class="price-grid">
+      <div class="price-card" onclick="sel(this,'Weekly Pass','6200')">💎 Weekly Pass<br>၆,၂၀၀ Ks</div>
+      <div class="price-card" onclick="sel(this,'Twilight Pass','32200')">🤩 Twilight Pass<br>၃၂,၂၀၀ Ks</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>၃။ Double Dia (တစ်ခါစီသာ)</h3>
+    <span class="note">* အကောင့်တစ်ခုလျှင် ၁ ကြိမ်သာ ဖြည့်၍ရပါသည်</span>
+    <div class="price-grid">
+      <div class="price-card" onclick="sel(this,'50+50 Double','3500')">50+50 💎<br>၃,၅၀၀ Ks</div>
+      <div class="price-card" onclick="sel(this,'150+150 Double','10700')">150+150 💎<br>၁၀,၇၀၀ Ks</div>
+      <div class="price-card" onclick="sel(this,'250+250 Double','15000')">250+250 💎<br>၁၅,၀၀၀ Ks</div>
+      <div class="price-card" onclick="sel(this,'500+500 Double','32800')">500+500 💎<br>၃၂,၈၀၀ Ks</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>၄။ Diamonds</h3>
+    <div class="price-grid">
+      <div class="price-card" onclick="sel(this,'11 Dia','1000')">11 💎<br>1000</div>
+      <div class="price-card" onclick="sel(this,'22 Dia','2000')">22 💎<br>2000</div>
+      <div class="price-card" onclick="sel(this,'33 Dia','2600')">33 💎<br>2600</div>
+      <div class="price-card" onclick="sel(this,'44 Dia','3500')">44 💎<br>3500</div>
+      <div class="price-card" onclick="sel(this,'56 Dia','4300')">56 💎<br>4300</div>
+      <div class="price-card" onclick="sel(this,'86 Dia','5200')">86 💎<br>5200</div>
+      <div class="price-card" onclick="sel(this,'172 Dia','11000')">172 💎<br>11000</div>
+      <div class="price-card" onclick="sel(this,'257 Dia','15000')">257 💎<br>15000</div>
+      <div class="price-card" onclick="sel(this,'343 Dia','21000')">343 💎<br>21000</div>
+      <div class="price-card" onclick="sel(this,'429 Dia','24400')">429 💎<br>24400</div>
+      <div class="price-card" onclick="sel(this,'515 Dia','30000')">515 💎<br>30000</div>
+      <div class="price-card" onclick="sel(this,'600 Dia','35200')">600 💎<br>35200</div>
+      <div class="price-card" onclick="sel(this,'706 Dia','39500')">706 💎<br>39500</div>
+      <div class="price-card" onclick="sel(this,'963 Dia','56300')">963 💎<br>56300</div>
+      <div class="price-card" onclick="sel(this,'1049 Dia','58500')">1049 💎<br>58500</div>
+      <div class="price-card" onclick="sel(this,'2195 Dia','115900')">2195 💎<br>115900</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>၅။ ငွေလွှဲပြေစာတင်ရန်</h3>
+    <p style="font-size:13px;color:#aaa">KPay/Wave: 09776432409 (Lukar Shop)</p>
+    <input type="file" accept="image/*" onchange="view(event)">
+    <div class="preview-box" id="pre">ပြေစာပုံရွေးပါ</div>
+  </div>
+
+  <button class="btn-submit" onclick="send()">အော်ဒါတင်မည်</button>
 </div>
-<div class="footer-nav"><a href="#" style="color:#e94560; font-weight:bold">🏠 Home</a><a href="#">💰 Payment</a></div>
+
+<script>
+  let item="", price="";
+  function sel(el,n,p){
+    document.querySelectorAll('.price-card').forEach(c=>c.classList.remove('active'));
+    el.classList.add('active'); item=n; price=p;
+  }
+  function view(e){
+    var r=new FileReader(); r.onload=function(){
+      var o=document.getElementById('pre'); o.style.backgroundImage="url("+r.result+")"; o.innerHTML="";
+    }; r.readAsDataURL(e.target.files[0]);
+  }
+  function send(){
+    const id=document.getElementById('gid').value;
+    const sid=document.getElementById('sid').value;
+    if(!id || !sid || !item){ alert('အချက်အလက်ပြည့်စုံစွာဖြည့်ပါ'); return; }
+    
+    const text = `🛒 *New Order from LUKAR SHOP*%0A━━━━━━━━━━━━━━━%0A👤 ID: ${id} (${sid})%0A📦 Item: ${item}%0A💰 Price: ${price} Ks%0A━━━━━━━━━━━━━━━%0Aစစ်ဆေးပေးပါရန်!`;
+    
+    // ဤနေရာတွင် သင့် Telegram Chat သို့ တန်းပို့ပေးမည်
+    window.location.href = `https://t.me/myatbonek15_creator?text=${text}`;
+  }
+</script>
 </body></html>
