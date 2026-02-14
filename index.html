@@ -1,42 +1,214 @@
-function confirmOrder() {
-    const isChecked = document.getElementById('confirm_check').checked;
-    const isVerified = document.getElementById('name-result-box').style.display === 'block';
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lukar Game Shop - PUBG Mobile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --main: #e94560; --dark: #121212; --card: #ffffff; --green: #2ecc71; --bg-gray: #f4f7f6; }
+        body { background: var(--bg-gray); color: #333; font-family: sans-serif; margin: 0; padding-bottom: 60px; }
+        
+        .header { background: #1a1a1a; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .container { padding: 15px; }
+        
+        /* Category Section */
+        .cat-title { display: flex; align-items: center; gap: 10px; margin: 20px 0 10px; font-weight: bold; font-size: 15px; color: #1a1a1a; }
+        .cat-num { background: var(--main); color: white; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+        .wait-time { font-size: 11px; color: #666; margin-bottom: 15px; display: block; }
 
-    // ၁. ID စစ်ပြီးကြောင်း သေချာပါစေ
+        /* Product Grid */
+        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        .p-card { background: var(--card); border-radius: 12px; padding: 15px 10px; text-align: center; border: 1px solid #eee; position: relative; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .p-card:active { transform: scale(0.95); background: #f9f9f9; }
+        .p-card.active { border-color: var(--main); background: #fff5f6; }
+        .p-card img { width: 45px; margin-bottom: 8px; }
+        .p-name { display: block; font-size: 13px; font-weight: bold; margin-bottom: 5px; }
+        .p-price { display: block; color: var(--main); font-size: 14px; font-weight: bold; }
+        
+        /* Modal Style */
+        #modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; align-items: center; justify-content: center; }
+        .modal { background: white; width: 90%; max-width: 360px; border-radius: 15px; overflow: hidden; animation: zoom 0.2s; }
+        @keyframes zoom { from {transform: scale(0.8);} to {transform: scale(1);} }
+        .modal-header { background: #000; color: #fff; padding: 12px; text-align: center; font-weight: bold; }
+        .modal-body { padding: 20px; color: #333; }
+        .id-input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 10px; box-sizing: border-box; text-align: center; outline: none; }
+        .btn-check { width: 100%; background: #007bff; color: white; border: none; padding: 12px; border-radius: 8px; margin-bottom: 12px; font-weight: bold; }
+        #player-box { display: none; background: #e8f5e9; padding: 10px; border-radius: 8px; margin-bottom: 10px; text-align: center; color: #2e7d32; font-weight: bold; font-size: 14px; }
+        .info-box { background: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 10px; font-size: 13px; display: flex; justify-content: space-between; border: 1px solid #eee; }
+        .bal-box { background: #e3f2fd; color: #1976d2; padding: 12px; border-radius: 8px; text-align: center; font-weight: bold; margin-bottom: 15px; }
+        .btn-group { display: flex; gap: 10px; }
+        .btn-cancel { flex: 1; background: #eee; border: none; padding: 12px; border-radius: 8px; color: #666; font-weight: bold; }
+        .btn-confirm { flex: 1; background: var(--main); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <i class="fas fa-chevron-left" onclick="history.back()"></i>
+    <b style="font-size: 16px;">PUBG GLOBAL UC</b>
+    <div style="font-size: 13px; background:#333; padding:5px 10px; border-radius:5px;">25000 ကျပ်</div>
+</div>
+
+<div class="container">
+    <div class="cat-title"><span class="cat-num">1</span> UC Topup (Global)</div>
+    <span class="wait-time"><i class="far fa-clock"></i> Waiting Time: 0 Min (Instant)</span>
+    <div class="product-grid" id="uc-grid"></div>
+
+    <div class="cat-title" style="margin-top:30px;"><span class="cat-num">2</span> Prime & Subscription</div>
+    <span class="wait-time"><i class="far fa-clock"></i> Waiting Time: 5 Min</span>
+    <div class="product-grid">
+        <div class="p-card" onclick="openPop('Prime One Month', 5000)">
+            <img src="https://www.pubgmobile.com/images/event/prime/prime_icon1.png">
+            <span class="p-name">Prime (1 Month)</span>
+            <span class="p-price">5000 ကျပ်</span>
+        </div>
+        <div class="p-card" onclick="openPop('Prime Plus Month', 45000)">
+            <img src="https://www.pubgmobile.com/images/event/prime/prime_icon2.png">
+            <span class="p-name">Prime Plus</span>
+            <span class="p-price">45000 ကျပ်</span>
+        </div>
+    </div>
+
+    <div class="cat-title" style="margin-top:30px;"><span class="cat-num">3</span> Special Packs (One Time Only)</div>
+    <div class="product-grid">
+        <div class="p-card" onclick="openPop('First Purchase', 5000)">
+            <span class="p-name">First Purchase</span>
+            <span class="p-price">5000 ကျပ်</span>
+        </div>
+        <div class="p-card" onclick="openPop('Material Pack', 15700)">
+            <span class="p-name">Material Pack</span>
+            <span class="p-price">15700 ကျပ်</span>
+        </div>
+        <div class="p-card" onclick="openPop('Mythic Emblem', 23000)">
+            <span class="p-name">Mythic Emblem</span>
+            <span class="p-price">23000 ကျပ်</span>
+        </div>
+    </div>
+</div>
+
+<div id="modal-overlay">
+    <div class="modal">
+        <div class="modal-header">အချက်အလက်များဖြည့်သွင်းပါ</div>
+        <div class="modal-body">
+            <input type="number" id="pubg_id" class="id-input" placeholder="Enter Character ID">
+            <button class="btn-check" id="check-btn" onclick="checkPUBG()">ID စစ်ဆေးမည်</button>
+            
+            <div id="player-box">
+                <i class="fas fa-user-check"></i> Player: <span id="p-name-tag">---</span>
+            </div>
+
+            <div class="info-box">
+                <span id="sel-item">Product</span>
+                <b id="sel-price">0 Ks</b>
+            </div>
+
+            <div class="bal-box">
+                လက်ကျန်ငွေ = <span id="rem-bal">0</span> ကျပ်
+            </div>
+
+            <div style="font-size: 11px; color: #888; margin-bottom: 15px;">
+                <input type="checkbox" id="c_check"> အချက်အလက်များ မှန်ကန်ပါသည်
+            </div>
+
+            <div class="btn-group">
+                <button class="btn-cancel" onclick="closePop()">မဝယ်သေးပါ</button>
+                <button class="btn-confirm" onclick="confirmOrder()">ဝယ်မည်</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const ucList = [
+        [60, 3900], [180, 12400], [325, 19200], [385, 23000], [660, 37400],
+        [720, 43200], [985, 55600], [1320, 73800], [1800, 92500], [3850, 190000], [8100, 373000]
+    ];
+
+    const grid = document.getElementById('uc-grid');
+    ucList.forEach(u => {
+        grid.innerHTML += `
+            <div class="p-card" onclick="openPop('${u[0]} UC', ${u[1]})">
+                <img src="https://www.pubgmobile.com/common/images/icon_uc.png">
+                <span class="p-name">${u[0]} UC</span>
+                <span class="p-price">${u[1].toLocaleString()} ကျပ်</span>
+            </div>
+        `;
+    });
+
+    let myBal = 25000; let currentP = 0;
+
+    function openPop(name, price) {
+        currentP = price;
+        document.getElementById('sel-item').innerText = name;
+        document.getElementById('sel-price').innerText = price.toLocaleString() + " Ks";
+        document.getElementById('rem-bal').innerText = (myBal - price).toLocaleString();
+        document.getElementById('modal-overlay').style.display = 'flex';
+        document.getElementById('player-box').style.display = 'none';
+        document.getElementById('check-btn').style.display = 'block';
+    }
+
+    function checkPUBG() {
+        const id = document.getElementById('pubg_id').value;
+        if(!id) return alert("ID ရိုက်ပါ");
+        document.getElementById('check-btn').innerText = "စစ်ဆေးနေသည်...";
+        setTimeout(() => {
+            document.getElementById('player-box').style.display = 'block';
+            document.getElementById('p-name-tag').innerText = "PUBG_Player_" + id.slice(-4);
+            document.getElementById('check-btn').style.display = 'none';
+        }, 800);
+    }
+
+    function closePop() { document.getElementById('modal-overlay').style.display = 'none'; }
+    
+
+function confirmOrder() {
+    const isChecked = document.getElementById('c_check').checked;
+    const isVerified = document.getElementById('player-box').style.display === 'block';
+
+    // ၁. ID အရင်စစ်ထားခြင်း ရှိမရှိ စစ်ဆေးခြင်း
     if(!isVerified) {
         alert("ID ကို အရင်ဆုံး စစ်ဆေးပေးပါဦးဗျ");
         return;
     }
 
-    // ၂. အမှန်ခြစ်ပြီးကြောင်း သေချာပါစေ
+    // ၂. အချက်အလက် မှန်ကန်ကြောင်း အတည်ပြုချက် စစ်ဆေးခြင်း
     if(!isChecked) {
-        alert("အချက်အလက်များ မှန်ကန်ကြောင်း အမှန်ခြစ်ပေးပါ");
+        alert("အချက်အလက် မှန်ကန်ကြောင်း အမှန်ခြစ်ပေးပါဦး");
         return;
     }
 
-    // ၃. လက်ကျန်ငွေ ရှိမရှိ စစ်ဆေးပြီး အော်ဒါပို့ခြင်း
-    if (userBalance >= currentItemPrice) {
-        // အကောင့်ထဲက ငွေကို နှုတ်လိုက်ခြင်း
-        userBalance -= currentItemPrice;
+    // ၃. လက်ကျန်ငွေ လုံလောက်မှု ရှိမရှိ စစ်ဆေးခြင်း
+    if (myBal >= currentP) {
+        // ငွေကို တစ်ခါတည်း နှုတ်လိုက်ခြင်း (Instant Deduction)
+        myBal -= currentP; 
         
-        // Website ပေါ်ရှိ လက်ကျန်ငွေကို Update လုပ်ခြင်း
-        document.getElementById('top-bal').innerText = userBalance.toLocaleString() + " ကျပ် +";
+        // Header မှာရှိတဲ့ ငွေပမာဏကို Update လုပ်ခြင်း
+        document.getElementById('top-bal').innerText = myBal.toLocaleString() + " ကျပ် +";
         
-        // အချက်အလက်များကို စုစည်းခြင်း
-        const gid = document.getElementById('game_id').value;
-        const sid = document.getElementById('server_id').value;
-        const pName = document.getElementById('p_name').innerText;
-        const pPrice = document.getElementById('p_price').innerText;
-
-        // Telegram သို့ ပို့မည့် စာသားပုံစံ
-        const message = `🚀 *NEW ORDER (PAID)*%0A━━━━━━━━━━━━━━━━%0A🎮 Game: Mobile Legends / PUBG%0A👤 Player ID: ${gid}%0A🌍 Server ID: ${sid}%0A📦 Item: ${pName}%0A💰 Price: ${pPrice}%0A🏦 Remaining Balance: ${userBalance.toLocaleString()} Ks%0A━━━━━━━━━━━━━━━━%0A✅ အော်ဒါအတွက် ငွေပေးချေမှု အောင်မြင်ပြီးပါပြီ။`;
-
-        // သင့်ရဲ့ Telegram ဆီသို့ တိုက်ရိုက်ပို့ခြင်း
-        window.open(`https://t.me/official_lukar?text=${message}`, '_blank');
+        // အော်ဒါအောင်မြင်ကြောင်း ပြသခြင်း
+        alert("အော်ဒါတင်ခြင်း အောင်မြင်ပါသည်။ \nလက်ကျန်ငွေ: " + myBal.toLocaleString() + " ကျပ်");
         
-        alert("အော်ဒါတင်ခြင်း အောင်မြင်ပါသည်။ Admin ထံသို့ အချက်အလက်များ ပို့ပေးပါမည်။");
-        closeModal();
+        // Admin ဆီသို့ Telegram မှ အော်ဒါအချက်အလက် ပို့ခြင်း
+        sendToTelegram(); 
+        
+        closePop();
     } else {
-        alert("အကောင့်ထဲမှာ လက်ကျန်ငွေ မလုံလောက်ပါဘူးဗျ။");
+        // ငွေမလုံလောက်ပါက ငွေဖြည့်ရန် သတိပေးခြင်း
+        alert("အကောင့်ထဲမှာ ငွေမလုံလောက်တော့ပါဘူးဗျ။ ငွေအရင်ဖြည့်ပေးပါဦး။");
     }
 }
+
+function sendToTelegram() {
+    const gid = document.getElementById('pubg_id').value;
+    const item = document.getElementById('sel-item').innerText;
+    const price = document.getElementById('sel-price').innerText;
+    
+    const message = `✅ *ORDER SUCCESS (PAID)*%0A━━━━━━━━━━━━━━━━%0A👤 Player ID: ${gid}%0A📦 Item: ${item}%0A💰 Paid: ${price}%0A🏦 Remaining Bal: ${myBal} Ks%0A━━━━━━━━━━━━━━━━`;
+    
+    // Telegram သို့ အလိုအလျောက် ပို့ပေးခြင်း
+    window.open(`https://t.me/official_lukar?text=${message}`, '_blank');
+}
+</script>
+</body>
+</html>
