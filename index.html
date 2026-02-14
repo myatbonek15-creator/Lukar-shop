@@ -1,126 +1,42 @@
-<!DOCTYPE html>
-<html lang="my">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lukar Game Shop</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root { --main: #e94560; --dark: #0f0f1b; --card: #1a1a2e; --accent: #00d2ff; }
-        body { background: var(--dark); color: white; font-family: sans-serif; margin: 0; padding-bottom: 50px; }
-        .header { background: var(--card); padding: 15px; text-align: center; border-bottom: 2px solid var(--main); position: sticky; top: 0; z-index: 100; }
-        .container { padding: 15px; }
+function confirmOrder() {
+    const isChecked = document.getElementById('confirm_check').checked;
+    const isVerified = document.getElementById('name-result-box').style.display === 'block';
 
-        /* Wallet System */
-        .wallet-section { background: linear-gradient(135deg, #1a1a2e 0%, #e94560 100%); padding: 20px; border-radius: 20px; text-align: center; margin-bottom: 25px; box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
-        .bal-title { font-size: 13px; opacity: 0.9; margin-bottom: 5px; display: block; }
-        #user_bal { font-size: 28px; font-weight: bold; margin-bottom: 15px; color: #fff; }
-        .check-box { display: flex; gap: 8px; background: rgba(255,255,255,0.1); padding: 5px; border-radius: 12px; }
-        .check-box input { border: none; background: transparent; color: white; padding: 10px; width: 100%; outline: none; }
-        .btn-check { background: white; color: var(--main); border: none; padding: 0 15px; border-radius: 10px; font-weight: bold; cursor: pointer; }
-
-        /* Payment Info */
-        .pay-box { background: var(--card); padding: 15px; border-radius: 15px; border: 1px solid #333; margin-bottom: 25px; }
-        .pay-item { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; padding: 10px; background: #0c0c16; border-radius: 10px; }
-        .pay-item i { font-size: 24px; color: var(--accent); }
-        .pay-info b { display: block; color: var(--main); font-size: 15px; }
-        .pay-info span { font-size: 13px; color: #aaa; }
-
-        /* Form & Grid */
-        .section { background: var(--card); padding: 18px; border-radius: 15px; border: 1px solid #333; margin-bottom: 20px; }
-        .stitle { color: var(--main); font-size: 14px; font-weight: bold; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
-        input, select { width: 100%; padding: 12px; margin: 8px 0; background: #0c0c16; border: 1px solid #444; border-radius: 10px; color: white; box-sizing: border-box; font-size: 14px; outline: none; }
-        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-        .card { background: #252545; padding: 15px 10px; border-radius: 12px; border: 1px solid #3d3d5d; text-align: center; cursor: pointer; }
-        .card.active { border-color: var(--main); background: rgba(233, 69, 96, 0.2); }
-        .price { display: block; color: #2ecc71; font-weight: bold; margin-top: 5px; }
-
-        .btn-order { background: var(--main); color: white; width: 100%; padding: 16px; border: none; border-radius: 12px; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px; }
-    </style>
-</head>
-<body>
-
-<div class="header"><h3>LUKAR GAME SHOP</h3></div>
-
-<div class="container">
-    <div class="wallet-section">
-        <span class="bal-title"><i class="fas fa-wallet"></i> My Wallet Balance</span>
-        <div id="user_bal">0 Ks</div>
-        <div class="check-box">
-            <input type="text" id="check_id" placeholder="Enter User ID to check balance">
-            <button class="btn-check" onclick="checkBalance()">Check</button>
-        </div>
-        <button onclick="window.location.href='https://t.me/official_lukar?text=ငွေဖြည့်ချင်လို့ပါ'" style="background:none; border:none; color:white; font-size:12px; margin-top:10px; text-decoration:underline; cursor:pointer;">Contact Admin to Deposit</button>
-    </div>
-
-    <div class="pay-box">
-        <div class="stitle"><i class="fas fa-university"></i> Payment Methods</div>
-        <div class="pay-item">
-            <i class="fas fa-money-check-alt"></i>
-            <div class="pay-info">
-                <b>K Pay / Wave Pay</b>
-                <span>09776432409 (Myat Bone Khant)</span>
-            </div>
-        </div>
-        <p style="font-size: 11px; color: #888; text-align: center;">ငွေလွှဲပြီးလျှင် Screenshot ကို Admin ဆီသို့ ပေးပို့ပါ။</p>
-    </div>
-
-    <div class="section">
-        <div class="stitle"><i class="fas fa-user-shield"></i> Account Login Info</div>
-        <input type="tel" id="ph" placeholder="Phone Number (ဖုန်းနံပါတ်)">
-        <input type="text" id="pw" placeholder="Password (စကားဝှက်)">
-        <select id="type">
-            <option>Facebook Login</option>
-            <option>Moonton Login</option>
-            <option>Gmail Login</option>
-        </select>
-    </div>
-
-    <div class="stitle"><i class="fas fa-gem"></i> Select Items</div>
-    <div class="grid">
-        <div class="card" onclick="sel(this,'ML 86💎','5200')">86 💎<span class="price">5,200 Ks</span></div>
-        <div class="card" onclick="sel(this,'ML 172💎','11000')">172 💎<span class="price">11,000 Ks</span></div>
-        <div class="card" onclick="sel(this,'Weekly','6200')">Weekly Pass<span class="price">6,200 Ks</span></div>
-        <div class="card" onclick="sel(this,'PUBG 60UC','3500')">60 UC<span class="price">3,500 Ks</span></div>
-    </div>
-
-    <button class="btn-order" onclick="submit()">🛒 အော်ဒါတင်မည်</button>
-</div>
-
-<script>
-    // --- ဝယ်သူစာရင်းကို ဒီနေရာမှာ လက်ရှိငွေနဲ့အတူ ထည့်ပေးပါ ---
-    const userDB = {
-        "101": 5000,
-        "102": 15000,
-        "Lukar": 50000
-    };
-
-    let sItem = "", sPrice = "";
-
-    function checkBalance() {
-        const id = document.getElementById('check_id').value;
-        const balDisp = document.getElementById('user_bal');
-        if(userDB[id] !== undefined) {
-            balDisp.innerText = userDB[id].toLocaleString() + " Ks";
-            balDisp.style.color = "#fff";
-        } else {
-            alert("User ID မတွေ့ရှိပါဗျ");
-            balDisp.innerText = "0 Ks";
-        }
+    // ၁. ID စစ်ပြီးကြောင်း သေချာပါစေ
+    if(!isVerified) {
+        alert("ID ကို အရင်ဆုံး စစ်ဆေးပေးပါဦးဗျ");
+        return;
     }
 
-    function sel(el, n, p) {
-        document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
-        el.classList.add('active'); sItem = n; sPrice = p;
+    // ၂. အမှန်ခြစ်ပြီးကြောင်း သေချာပါစေ
+    if(!isChecked) {
+        alert("အချက်အလက်များ မှန်ကန်ကြောင်း အမှန်ခြစ်ပေးပါ");
+        return;
     }
 
-    function submit() {
-        const ph = document.getElementById('ph').value, pw = document.getElementById('pw').value, ty = document.getElementById('type').value;
-        if(!ph || !pw || !sItem) { alert('အချက်အလက်များကို ပြည့်စုံအောင် ဖြည့်ပါ'); return; }
-        const msg = `🚀 *LUKAR SHOP ORDER*%0A━━━━━━━━━━━━━━━━%0A📱 Phone: ${ph}%0A🔑 Pass: ${pw}%0A🌐 Type: ${ty}%0A📦 Item: ${sItem}%0A💰 Price: ${sPrice} Ks%0A━━━━━━━━━━━━━━━━`;
-        window.location.href = `https://t.me/official_lukar?text=${msg}`;
-    }
-</script>
+    // ၃. လက်ကျန်ငွေ ရှိမရှိ စစ်ဆေးပြီး အော်ဒါပို့ခြင်း
+    if (userBalance >= currentItemPrice) {
+        // အကောင့်ထဲက ငွေကို နှုတ်လိုက်ခြင်း
+        userBalance -= currentItemPrice;
+        
+        // Website ပေါ်ရှိ လက်ကျန်ငွေကို Update လုပ်ခြင်း
+        document.getElementById('top-bal').innerText = userBalance.toLocaleString() + " ကျပ် +";
+        
+        // အချက်အလက်များကို စုစည်းခြင်း
+        const gid = document.getElementById('game_id').value;
+        const sid = document.getElementById('server_id').value;
+        const pName = document.getElementById('p_name').innerText;
+        const pPrice = document.getElementById('p_price').innerText;
 
-</body>
-</html>
+        // Telegram သို့ ပို့မည့် စာသားပုံစံ
+        const message = `🚀 *NEW ORDER (PAID)*%0A━━━━━━━━━━━━━━━━%0A🎮 Game: Mobile Legends / PUBG%0A👤 Player ID: ${gid}%0A🌍 Server ID: ${sid}%0A📦 Item: ${pName}%0A💰 Price: ${pPrice}%0A🏦 Remaining Balance: ${userBalance.toLocaleString()} Ks%0A━━━━━━━━━━━━━━━━%0A✅ အော်ဒါအတွက် ငွေပေးချေမှု အောင်မြင်ပြီးပါပြီ။`;
+
+        // သင့်ရဲ့ Telegram ဆီသို့ တိုက်ရိုက်ပို့ခြင်း
+        window.open(`https://t.me/official_lukar?text=${message}`, '_blank');
+        
+        alert("အော်ဒါတင်ခြင်း အောင်မြင်ပါသည်။ Admin ထံသို့ အချက်အလက်များ ပို့ပေးပါမည်။");
+        closeModal();
+    } else {
+        alert("အကောင့်ထဲမှာ လက်ကျန်ငွေ မလုံလောက်ပါဘူးဗျ။");
+    }
+}
