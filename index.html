@@ -9,93 +9,91 @@
         :root { --main: #e94560; --dark: #0f0f1b; --card: #1a1a2e; --accent: #00d2ff; }
         body { background: var(--dark); color: white; font-family: sans-serif; margin: 0; padding-bottom: 90px; }
         .header { background: var(--card); padding: 15px; text-align: center; border-bottom: 2px solid var(--main); position: sticky; top: 0; z-index: 100; }
+        .wallet-box { background: linear-gradient(45deg, #1a1a2e, #e94560); margin: 15px; padding: 20px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
         .container { padding: 12px; }
         .section { background: var(--card); padding: 15px; border-radius: 15px; margin-bottom: 15px; border: 1px solid #333; }
         .stitle { color: var(--main); font-size: 14px; font-weight: bold; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
         input, select { width: 100%; padding: 12px; margin: 5px 0; background: #0c0c16; border: 1px solid #444; border-radius: 10px; color: white; box-sizing: border-box; font-size: 15px; }
-        
-        .method-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
-        .m-btn { background: #252545; padding: 12px; border-radius: 10px; border: 1px solid #3d3d5d; color: white; text-align: center; font-size: 14px; cursor: pointer; }
-        .m-btn.active { background: var(--main); border-color: var(--main); font-weight: bold; }
-
-        .tabs { display: flex; gap: 8px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 5px; }
+        .tabs { display: flex; gap: 8px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
         .tab-btn { background: #252545; padding: 10px 15px; border-radius: 20px; border: 1px solid #3d3d5d; color: white; white-space: nowrap; font-size: 13px; cursor: pointer; }
-        .tab-btn.active { border-color: var(--main); background: rgba(233, 69, 96, 0.2); }
-
+        .tab-btn.active { background: var(--main); border-color: var(--main); }
         .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; display: none; }
         .grid.active { display: grid; }
         .card { background: #252545; padding: 15px 10px; border-radius: 12px; border: 1px solid #3d3d5d; text-align: center; }
         .card.active { border-color: var(--main); background: rgba(233, 69, 96, 0.2); }
         .price { display: block; color: #2ecc71; font-weight: bold; margin-top: 5px; font-size: 14px; }
-        
         .footer { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); padding: 15px; border-top: 1px solid #333; }
         .btn-order { background: var(--main); color: white; width: 100%; padding: 15px; border: none; border-radius: 12px; font-weight: bold; font-size: 16px; }
-        #preview { width: 100%; height: 120px; margin-top: 10px; border-radius: 10px; display: none; object-fit: contain; background: #000; border: 1px dashed #555; }
+        .btn-deposit { background: #2ecc71; color: white; border: none; padding: 8px 15px; border-radius: 8px; font-size: 12px; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="header"><h3>LUKAR GAME SHOP</h3></div>
 
+<div class="wallet-box">
+    <div>
+        <small style="opacity: 0.8;">My Balance</small>
+        <div style="font-size: 24px; font-weight: bold;">0 Ks</div>
+    </div>
+    <button class="btn-deposit" onclick="topupWallet()">ငွေဖြည့်မည်</button>
+</div>
+
 <div class="container">
-    <div class="method-tabs">
-        <div class="m-btn active" onclick="setMethod(this, 'direct')"><i class="fas fa-bolt"></i> ID ဖြည့်မည်</div>
-        <div class="m-btn" onclick="setMethod(this, 'login')"><i class="fas fa-user-lock"></i> Login ဖြည့်မည်</div>
-    </div>
-
-    <div id="direct-fields" class="section">
-        <div class="stitle"><i class="fas fa-id-card"></i> Player ID & Server</div>
-        <input type="number" id="pid" placeholder="Enter Player ID">
-        <input type="number" id="sid" placeholder="Enter Server ID">
-    </div>
-
-    <div id="login-fields" class="section" style="display:none;">
-        <div class="stitle"><i class="fas fa-key"></i> Login Account Details</div>
-        <select id="login_type">
-            <option value="Facebook">Facebook</option>
-            <option value="Moonton">Moonton</option>
-            <option value="Gmail">Gmail</option>
-            <option value="TikTok">TikTok</option>
+    <div class="section">
+        <div class="stitle"><i class="fas fa-user-circle"></i> အကောင့်အချက်အလက်</div>
+        <select id="method" onchange="toggleFields()">
+            <option value="id">Player ID / Server ဖြင့်ဝယ်မည်</option>
+            <option value="login">Login အကောင့်ဖြင့်ဝယ်မည်</option>
         </select>
-        <input type="text" id="acc_mail" placeholder="Email / Phone">
-        <input type="text" id="acc_pw" placeholder="Password">
-        <input type="text" id="acc_back" placeholder="Backup Code (If any)">
+        <div id="id-fields">
+            <input type="number" id="pid" placeholder="Enter Player ID">
+            <input type="number" id="sid" placeholder="Enter Server ID">
+        </div>
+        <div id="login-fields" style="display:none;">
+            <input type="text" id="acc_mail" placeholder="Email / Phone">
+            <input type="text" id="acc_pw" placeholder="Password">
+            <select id="acc_type">
+                <option>Facebook</option><option>Moonton</option><option>Gmail</option>
+            </select>
+        </div>
     </div>
 
     <div class="tabs">
-        <div class="tab-btn active" onclick="showCat(this, 'mlbb')">MLBB</div>
+        <div class="tab-btn active" onclick="showCat(this, 'mlbb')">MLBB Diamonds</div>
         <div class="tab-btn" onclick="showCat(this, 'pubg')">PUBG UC</div>
+        <div class="tab-btn" onclick="showCat(this, 'pass')">Special Passes</div>
     </div>
 
     <div class="section">
         <div id="mlbb" class="grid active">
-            <div class="card" onclick="sel(this,'Weekly Pass','6200')"><i class="fas fa-crown"></i>Weekly<span class="price">6,200 Ks</span></div>
-            <div class="card" onclick="sel(this,'86 Dia','5200')">86 💎<span class="price">5,200 Ks</span></div>
-            <div class="card" onclick="sel(this,'172 Dia','11000')">172 💎<span class="price">11,000 Ks</span></div>
-            <div class="card" onclick="sel(this,'257 Dia','15000')">257 💎<span class="price">15,000 Ks</span></div>
+            <script>
+                const ml = [['11','1000'],['22','2000'],['33','2600'],['44','3500'],['56','4300'],['86','5200'],['172','11000'],['257','15000'],['343','21000'],['429','24400'],['515','30000'],['600','35200'],['706','39500'],['963','56300'],['1049','58500'],['1135','64000'],['2195','115900'],['3688','191800'],['5532','294500'],['9288','495900']];
+                ml.forEach(d => document.write(`<div class="card" onclick="sel(this,'ML ${d[0]}💎','${d[1]}')">${d[0]} 💎<span class="price">${d[1]} Ks</span></div>`));
+            </script>
         </div>
-        <div id="pubg" class="grid">
-            <div class="card" onclick="sel(this,'PUBG 60 UC','3500')">60 UC<span class="price">3,500 Ks</span></div>
-            <div class="card" onclick="sel(this,'PUBG 325 UC','16500')">325 UC<span class="price">16,500 Ks</span></div>
-        </div>
-    </div>
 
-    <div class="section">
-        <div class="stitle"><i class="fas fa-wallet"></i> Payment (09776432409)</div>
-        <button onclick="document.getElementById('file').click()" style="width:100%; padding:10px; background:#333; color:white; border:none; border-radius:8px;">📸 Screenshot တင်ရန်</button>
-        <input type="file" id="file" accept="image/*" style="display:none" onchange="showPre(event)">
-        <img id="preview">
+        <div id="pubg" class="grid">
+            <script>
+                const pg = [['60','3500'],['325','16500'],['660','32000'],['1800','85000'],['3850','165000'],['8100','320000']];
+                pg.forEach(u => document.write(`<div class="card" onclick="sel(this,'PUBG ${u[0]}UC','${u[1]}')">${u[0]} UC<span class="price">${u[1]} Ks</span></div>`));
+            </script>
+        </div>
+
+        <div id="pass" class="grid">
+            <div class="card" onclick="sel(this,'Weekly Pass','6200')">Weekly Pass<span class="price">6,200 Ks</span></div>
+            <div class="card" onclick="sel(this,'Twilight Pass','32200')">Twilight Pass<span class="price">32,200 Ks</span></div>
+        </div>
     </div>
 </div>
 
 <div class="footer"><button class="btn-order" onclick="submit()">🛒 အော်ဒါတင်မည်</button></div>
 
 <script>
-    let sMethod = "direct", sItem = "", sPrice = "";
-    function setMethod(btn, m) {
-        document.querySelectorAll('.m-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active'); sMethod = m;
-        document.getElementById('direct-fields').style.display = m === 'direct' ? 'block' : 'none';
+    let sItem = "", sPrice = "";
+    function toggleFields() {
+        const m = document.getElementById('method').value;
+        document.getElementById('id-fields').style.display = m === 'id' ? 'block' : 'none';
         document.getElementById('login-fields').style.display = m === 'login' ? 'block' : 'none';
     }
     function showCat(btn, id) {
@@ -107,25 +105,19 @@
         document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
         el.classList.add('active'); sItem = n; sPrice = p;
     }
-    function showPre(e) {
-        let r = new FileReader(); r.onload = function() { 
-            let o = document.getElementById('preview'); o.src = r.result; o.style.display = "block"; 
-        }; r.readAsDataURL(e.target.files[0]);
+    function topupWallet() {
+        window.location.href = "https://t.me/myatbonek15_creator?text=Hello, အကောင့်ထဲငွေဖြည့်ချင်လို့ပါခင်ဗျာ";
     }
     function submit() {
+        const m = document.getElementById('method').value;
         let details = "";
-        if(sMethod === 'direct') {
-            const id = document.getElementById('pid').value, sid = document.getElementById('sid').value;
-            if(!id) { alert('ID ဖြည့်ပါ'); return; }
-            details = `🆔 ID: ${id} (${sid})`;
+        if(m === 'id') {
+            details = `🆔 ID: ${document.getElementById('pid').value} (${document.getElementById('sid').value})`;
         } else {
-            const type = document.getElementById('login_type').value, mail = document.getElementById('acc_mail').value, pw = document.getElementById('acc_pw').value;
-            if(!mail || !pw) { alert('Login အချက်အလက်ဖြည့်ပါ'); return; }
-            details = `🔐 Login: ${type}%0A📧 Mail: ${mail}%0A🔑 PW: ${pw}`;
+            details = `🔐 Login: ${document.getElementById('acc_type').value}%0A📧 Mail: ${document.getElementById('acc_mail').value}%0A🔑 PW: ${document.getElementById('acc_pw').value}`;
         }
         if(!sItem) { alert('ပစ္စည်းရွေးပါ'); return; }
-        const msg = `🚀 *NEW ORDER*%0A━━━━━━━━━━━━━━━━%0A${details}%0A📦 Item: ${sItem}%0A💰 Price: ${sPrice} Ks%0A━━━━━━━━━━━━━━━━`;
-        window.location.href = `https://t.me/myatbonek15_creator?text=${msg}`;
+        window.location.href = `https://t.me/myatbonek15_creator?text=🚀 *LUKAR SHOP NEW ORDER*%0A━━━━━━━━━━━━━━━━%0A${details}%0A📦 Item: ${sItem}%0A💰 Price: ${sPrice} Ks%0A━━━━━━━━━━━━━━━━`;
     }
 </script>
 </body>
