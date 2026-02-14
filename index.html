@@ -7,72 +7,49 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --main: #2ecc71; --dark: #121212; --card: #1e1e1e; --text: #ffffff; --blue: #3b82f6; }
-        body { background: var(--dark); color: var(--text); font-family: sans-serif; margin: 0; padding-bottom: 50px; overflow-x: hidden; }
+        body { background: var(--dark); color: var(--text); font-family: sans-serif; margin: 0; padding-bottom: 50px; }
 
-        /* Login Screen (Matching Images) */
-        #login-screen { display: none; height: 100vh; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; position: fixed; width: 100%; top: 0; z-index: 1000; padding: 15px; box-sizing: border-box; }
-        .login-card { background: white; width: 100%; max-width: 360px; border-radius: 15px; overflow: hidden; color: #333; position: relative; animation: slideUp 0.3s; }
-        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .login-banner { width: 100%; height: auto; display: block; border-bottom: 2px solid #eee; }
-        .login-body { padding: 20px; }
-        .l-label { display: block; font-weight: bold; margin: 15px 0 5px; font-size: 14px; color: #444; }
-        .l-input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; outline: none; font-size: 14px; background: #f9f9f9; }
-        .btn-group-login { display: flex; gap: 10px; margin-top: 25px; }
-        .btn-l-close { flex: 1; padding: 12px; border: 1px solid var(--blue); background: white; color: var(--blue); border-radius: 8px; font-weight: bold; cursor: pointer; }
-        .btn-l-connect { flex: 1; padding: 12px; background: var(--blue); border: none; color: white; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        /* Login Screen */
+        #login-screen { display: none; height: 100vh; background: var(--dark); align-items: center; justify-content: center; position: fixed; width: 100%; top: 0; z-index: 1000; padding: 20px; box-sizing: border-box; }
+        .login-card { background: white; width: 100%; max-width: 380px; border-radius: 20px; padding: 30px; color: #333; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .l-input { width: 100%; padding: 13px; border: 1.5px solid #eee; border-radius: 10px; box-sizing: border-box; outline: none; margin-bottom: 15px; font-size: 15px; }
+        .btn-l-connect { width: 100%; padding: 14px; background: var(--blue); border: none; color: white; border-radius: 10px; font-weight: bold; cursor: pointer; }
 
-        /* Main Shop Header */
+        /* Header */
         #main-app { display: none; }
         .header { background: #1a1a1a; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 100; }
-        .bal-box { background: #333; padding: 8px 15px; border-radius: 8px; border: 1px solid #444; font-weight: bold; cursor: pointer; }
+        .bal-box { background: #333; padding: 8px 15px; border-radius: 8px; border: 1px solid #444; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 5px; }
 
-        /* Grid & Categories */
+        /* Game List - Two Columns */
         .container { padding: 15px; }
-        .section-title { font-size: 16px; margin: 20px 0 15px; font-weight: bold; letter-spacing: 1px; }
+        .section-title { font-size: 16px; margin: 20px 0 15px; font-weight: bold; border-left: 4px solid var(--main); padding-left: 10px; }
         .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-        .game-card { background: #1e1e1e; border-radius: 12px; border: 1px solid #333; padding: 10px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: 0.2s; }
+        .game-card { background: #1e1e1e; border-radius: 15px; border: 1px solid #333; padding: 15px 10px; text-align: center; cursor: pointer; transition: 0.3s; }
         .game-card:active { transform: scale(0.95); background: #252525; }
-        .game-card img { width: 45px; height: 45px; border-radius: 8px; object-fit: cover; }
-        .game-info b { font-size: 12px; display: block; color: #eee; }
-        .game-info span { font-size: 10px; color: #888; }
+        .game-card img { width: 60px; height: 60px; border-radius: 12px; margin-bottom: 10px; object-fit: cover; }
+        .game-card b { font-size: 14px; display: block; color: #fff; }
+        .game-card span { font-size: 11px; color: var(--main); margin-top: 5px; display: block; }
 
         /* Top-up Screen */
-        #topup-screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--dark); z-index: 200; overflow-y: auto; padding: 20px; box-sizing: border-box; }
-        .pay-card { background: white; color: black; border-radius: 12px; padding: 15px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; border-left: 5px solid var(--main); }
-        .upload-area { border: 2px dashed #444; border-radius: 15px; padding: 30px; text-align: center; margin: 20px 0; color: #888; }
-        .btn-submit-pay { width: 100%; padding: 15px; background: var(--main); border: none; border-radius: 10px; color: white; font-weight: bold; font-size: 16px; box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3); }
+        #topup-screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--dark); z-index: 200; padding: 20px; box-sizing: border-box; }
+        .pay-card { background: white; color: black; border-radius: 12px; padding: 15px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
 
-        /* Diamond Order Modal */
+        /* Order Modal */
         #modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 500; align-items: center; justify-content: center; padding: 15px; }
-        .modal { background: white; color: #333; width: 100%; max-width: 360px; border-radius: 15px; overflow: hidden; }
-        .modal-header { background: #000; color: #fff; padding: 12px; text-align: center; font-weight: bold; }
-        .modal-body { padding: 20px; }
-        .id-input-box { display: flex; border: 1px solid #ddd; border-radius: 5px; overflow: hidden; margin-bottom: 15px; }
-        .id-input-box input { width: 50%; padding: 12px; border: none; text-align: center; outline: none; border-right: 1px solid #eee; }
+        .modal { background: white; color: #333; width: 100%; max-width: 350px; border-radius: 15px; padding: 25px; text-align: center; }
+        .id-input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 12px; text-align: center; outline: none; font-size: 15px; }
+        .btn-buy { width: 100%; padding: 14px; background: var(--main); border: none; color: white; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px; }
     </style>
 </head>
 <body>
 
 <div id="login-screen">
     <div class="login-card">
-        <img src="https://i.ibb.co/XfXvX0X/Lukar-Banner.jpg" class="login-banner">
-        <div class="login-body">
-            <h3 style="margin:0; font-size:17px;">ဖုန်းနံပါတ်နှင့် ပတ်စဝက်ထည့်ပါ</h3>
-            
-            <label class="l-label">ဖုန်းနံပါတ်</label>
-            <input type="text" id="login_id" class="l-input" placeholder="09xxxxxxxxx">
-            
-            <label class="l-label">ပတ်စဝက်</label>
-            <input type="password" id="login_ps" class="l-input" placeholder="Enter password">
-            
-            <label class="l-label">ပတ်စဝက် အတည်ပြု</label>
-            <input type="password" id="login_ps_confirm" class="l-input" placeholder="Confirm password">
-
-            <div class="btn-group-login">
-                <button class="btn-l-close" onclick="alert('Please login to continue')">ပိတ်မည်</button>
-                <button class="btn-l-connect" onclick="doLogin()">ချိတ်ဆက်မည်</button>
-            </div>
-        </div>
+        <h2 style="text-align:center; color:var(--blue); margin-bottom:20px;">Lukar Shop</h2>
+        <input type="text" id="login_id" class="l-input" placeholder="ဖုန်းနံပါတ် (09776432409)">
+        <input type="password" id="login_ps" class="l-input" placeholder="ပတ်စဝက်">
+        <input type="password" id="login_ps_confirm" class="l-input" placeholder="ပတ်စဝက် အတည်ပြု">
+        <button class="btn-l-connect" onclick="doLogin()">ချိတ်ဆက်မည်</button>
     </div>
 </div>
 
@@ -80,86 +57,66 @@
     <div class="header">
         <div style="font-size: 18px; font-weight: bold;">Lukar Shop</div>
         <div class="bal-box" onclick="showTopup()">
-            <span id="display-bal">0</span> ကျပ် <i class="fas fa-plus-circle" style="color: var(--main); margin-left:5px;"></i>
+            <span id="display-bal">0</span> ကျပ် <i class="fas fa-plus-circle" style="color: var(--main);"></i>
         </div>
     </div>
 
     <div class="container">
-        <div style="background: #1e1e1e; border-radius: 15px; padding: 15px; margin-bottom: 20px; display: flex; justify-content: space-around; text-align: center; font-size: 12px;">
-            <div><i class="fas fa-history" style="font-size: 20px; margin-bottom: 5px;"></i><br>Topup History</div>
-            <div><i class="fas fa-shopping-bag" style="font-size: 20px; margin-bottom: 5px;"></i><br>Order History</div>
-        </div>
-
-        <div class="section-title">OUR PRODUCTS</div>
+        <div class="section-title">ဂိမ်းအမျိုးအစားများ</div>
         <div class="grid">
-            <div class="game-card" onclick="openGame('MLBB')">
+            <div class="game-card" onclick="openOrder('Mobile Legends (MLBB)', 'Diamonds')">
                 <img src="https://gameloot.in/wp-content/uploads/2020/10/Mobile-Legends-Bang-Bang-Diamond.png">
-                <div class="game-info"><b>Mobile Legends</b><span>View All</span></div>
+                <div class="game-info"><b>MLBB</b><span>ဝယ်ယူရန်နှိပ်ပါ</span></div>
             </div>
-            <div class="game-card" onclick="openGame('PUBG')">
+            
+            <div class="game-card" onclick="openOrder('PUBG Mobile', 'UC')">
                 <img src="https://www.pubgmobile.com/common/images/icon_uc.png">
-                <div class="game-info"><b>PUBG Mobile</b><span>1750 Sold</span></div>
-            </div>
-            <div class="game-card">
-                <img src="https://static.wikia.nocookie.net/freefire_gamepedia_en/images/1/10/App_icon.png">
-                <div class="game-info"><b>Freefire</b><span>View All</span></div>
-            </div>
-            <div class="game-card">
-                <img src="https://play-lh.googleusercontent.com/4SOnDkC-oO4E0R4u3zPshO30R6F-n_0Fv-yqL-5D0_2N8mX3E">
-                <div class="game-info"><b>Blood Strike</b><span>1669 Sold</span></div>
+                <div class="game-info"><b>PUBG</b><span>ဝယ်ယူရန်နှိပ်ပါ</span></div>
             </div>
         </div>
     </div>
 </div>
 
 <div id="topup-screen">
-    <div style="display:flex; align-items:center; gap:15px; margin-bottom:25px;">
-        <i class="fas fa-arrow-left" onclick="hideTopup()" style="font-size:20px; cursor:pointer;"></i>
-        <b style="font-size:18px;">လက်ကျန်ငွေထည့်ရန်</b>
-    </div>
-
+    <div onclick="hideTopup()" style="margin-bottom:20px; cursor:pointer;"><i class="fas fa-arrow-left"></i> နောက်သို့</div>
     <div class="pay-card">
-        <div><b>09776432409</b><br><small>KBZPay - Lukar Shop</small></div>
-        <button onclick="copyNum('09776432409')" style="background:#eee; border:none; padding:8px 12px; border-radius:5px; font-weight:bold;">Copy</button>
+        <span>KPay: 09776432409</span>
+        <button onclick="navigator.clipboard.writeText('09776432409');alert('Copied')">Copy</button>
     </div>
+    <div style="border:2px dashed #444; padding:20px; text-align:center; margin-bottom:20px; border-radius:10px;" onclick="this.innerText='ပြေစာတင်ပြီးပါပြီ ✅'; this.style.color='var(--main)'">ငွေလွှဲပြေစာတင်ရန်နှိပ်ပါ</div>
+    <input type="number" id="topup-amount" class="id-input" placeholder="ဖြည့်မည့်ငွေပမာဏ" style="background:#222; color:white; border:none; width:100%; box-sizing: border-box;">
+    <button class="btn-buy" onclick="processTopup()">အတည်ပြုမည်</button>
+</div>
 
-    <div class="upload-area" onclick="simulateUpload()" id="upload-box">
-        <i class="fas fa-cloud-upload-alt" style="font-size:40px; color:var(--main); margin-bottom:10px;"></i><br>
-        <span id="file-text">ငွေလွှဲပုံထည့်ရန်နှိပ်ပါ</span>
+<div id="modal-overlay">
+    <div class="modal">
+        <h3 id="m_title">Product Name</h3>
+        <p style="font-size: 13px; color: #666; margin-bottom: 20px;">ကျေးဇူးပြု၍ ID ကို မှန်ကန်စွာ ဖြည့်ပေးပါ</p>
+        <input type="number" id="g_id" class="id-input" placeholder="Game ID (Player ID)">
+        <input type="number" id="s_id" class="id-input" placeholder="Server ID (Optional)">
+        <button class="btn-buy" onclick="confirmOrder()">မှာယူမည်</button>
+        <button onclick="document.getElementById('modal-overlay').style.display='none'" style="border:none; background:none; margin-top:15px; color:#888; cursor:pointer;">မဝယ်တော့ပါ</button>
     </div>
-
-    <div style="background:#222; padding:15px; border-radius:10px; margin-bottom:20px;">
-        <input type="number" id="topup-amount" placeholder="ဖြည့်သွင်းမည့် ငွေပမာဏ" style="width:100%; background:transparent; border:none; color:white; outline:none; font-size:16px;">
-    </div>
-
-    <button class="btn-submit-pay" onclick="processTopup()">ဝယ်ယူမည်</button>
 </div>
 
 <script>
-    // Config
     const auth = { id: "09776432409", ps: "lukar123" };
-    let currentBalance = parseInt(localStorage.getItem("lukar_bal")) || 0;
-    let isFile = false;
+    let balance = parseInt(localStorage.getItem("lukar_bal")) || 0;
 
-    // Session Management
+    // Login logic
     window.onload = function() {
-        if(localStorage.getItem("lukar_logged") === "true") {
-            showMain();
-        } else {
-            document.getElementById('login-screen').style.display = 'flex';
-        }
+        if(localStorage.getItem("isLogged") === "true") showMain();
+        else document.getElementById('login-screen').style.display = 'flex';
     };
 
     function doLogin() {
         const id = document.getElementById('login_id').value;
         const ps = document.getElementById('login_ps').value;
-        const ps2 = document.getElementById('login_ps_confirm').value;
-
-        if(id === auth.id && ps === auth.ps) {
-            if(ps !== ps2) return alert("Confirm password မတူညီပါဘူး");
-            localStorage.setItem("lukar_logged", "true");
+        const psc = document.getElementById('login_ps_confirm').value;
+        if(id === auth.id && ps === auth.ps && ps === psc) {
+            localStorage.setItem("isLogged", "true");
             showMain();
-        } else { alert("အချက်အလက် မှားယွင်းနေပါတယ်"); }
+        } else { alert("အချက်အလက်မှားယွင်းနေပါသည်"); }
     }
 
     function showMain() {
@@ -168,41 +125,42 @@
         updateUI();
     }
 
-    // Balance Logic
     function showTopup() { document.getElementById('topup-screen').style.display = 'block'; }
     function hideTopup() { document.getElementById('topup-screen').style.display = 'none'; }
-    
-    function simulateUpload() {
-        isFile = true;
-        document.getElementById('file-text').innerText = "screenshot_selected.jpg ✅";
-        document.getElementById('upload-box').style.borderColor = "var(--main)";
-    }
 
     function processTopup() {
         const amt = document.getElementById('topup-amount').value;
-        if(amt < 1000) return alert("အနည်းဆုံး ၁၀၀၀ ကျပ်ပါ");
-        if(!isFile) return alert("ငွေလွှဲပြေစာ တင်ပေးပါ");
-
-        currentBalance += parseInt(amt);
-        localStorage.setItem("lukar_bal", currentBalance);
-        updateUI();
-        alert("ငွေဖြည့်သွင်းမှု အောင်မြင်ပါသည်။");
-        hideTopup();
+        if(amt >= 1000) {
+            balance += parseInt(amt);
+            localStorage.setItem("lukar_bal", balance);
+            updateUI();
+            alert("ငွေဖြည့်သွင်းမှု အောင်မြင်ပါသည်။");
+            hideTopup();
+        } else { alert("အနည်းဆုံး ၁၀၀၀ ကျပ် ဖြည့်ပေးပါ"); }
     }
 
-    function updateUI() {
-        document.getElementById('display-bal').innerText = currentBalance.toLocaleString();
+    function openOrder(game, type) {
+        document.getElementById('m_title').innerText = game;
+        document.getElementById('modal-overlay').style.display = 'flex';
     }
 
-    function copyNum(n) {
-        navigator.clipboard.writeText(n);
-        alert("Copied: " + n);
+    function confirmOrder() {
+        const gid = document.getElementById('g_id').value;
+        const sid = document.getElementById('s_id').value;
+        const gameName = document.getElementById('m_title').innerText;
+
+        if(!gid) return alert("Game ID ထည့်ပေးပါ");
+
+        let msg = `🚀 *NEW ORDER*\n`;
+        msg += `မင်္ဂလာပါ L U K A R သင်ဝယ်ယူထားသော ${gameName} အား ၁၀ မိနစ်အတွင်း ဖြည့်သွင်းပေးပါမည်။\n\n`;
+        msg += `🎮 ID: ${gid} ${sid ? '('+sid+')' : ''}\n🏦 လက်ကျန်: ${balance.toLocaleString()} ကျပ်`;
+
+        window.open("https://t.me/official_lukar?text=" + encodeURIComponent(msg), '_blank');
+        document.getElementById('modal-overlay').style.display = 'none';
+        alert("မှာယူမှု အောင်မြင်ပါသည်။ ၁၀ မိနစ်အတွင်း ဖြည့်ပေးပါမည်။");
     }
 
-    function openGame(name) {
-        alert(name + " items loading...");
-    }
+    function updateUI() { document.getElementById('display-bal').innerText = balance.toLocaleString(); }
 </script>
-
 </body>
 </html>
