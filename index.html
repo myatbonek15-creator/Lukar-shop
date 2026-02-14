@@ -1,1 +1,18 @@
-<html><head><meta name="viewport" content="width=device-width,initial-scale=1.0"><style>body{background:#0f0f0f;color:white;font-family:sans-serif;padding:20px}.card{background:#1a1a1a;padding:20px;border-radius:15px;border:1px solid #333;margin-bottom:20px}.btn{background:#2ecc71;padding:15px;border-radius:10px;display:block;text-align:center;font-weight:bold;margin-top:10px;cursor:pointer}#preview{width:100%;border-radius:10px;margin-top:10px;display:none}</style></head><body><h2>Lukar Shop</h2><div class="card"><h3>ငွေဖြည့်သွင်းရန်</h3><p>KPay/Wave: 09776432409</p><label class="btn" for="upload">📸 Screenshot တင်ရန်</label><input type="file" id="upload" accept="image/*" style="display:none" onchange="const r=new FileReader();r.onload=()=>{const i=document.getElementById('preview');i.src=r.result;i.style.display='block'};r.readAsDataURL(this.files[0])"><img id="preview"></div><div class="btn" style="background:#e94560" onclick="alert('အောင်မြင်ပါသည်')">အတည်ပြုသည်</div></body></html>
+<html><head><meta name="viewport" content="width=device-width,initial-scale=1.0"><style>
+body{background:#0f0f0f;color:white;font-family:sans-serif;padding:0;margin:0}
+.header{text-align:center;padding:25px;background:#1a1a1a;border-bottom:3px solid #e94560}
+.item-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;padding:20px;margin-bottom:80px}
+.product-card{background:#1a1a1a;padding:12px;border-radius:15px;border:1px solid #333;text-align:center}
+.product-img{background:#333;height:100px;border-radius:10px;margin-bottom:10px;display:flex;align-items:center;justify-content:center;font-size:35px}
+.price{color:#2ecc71;font-weight:bold;margin:10px 0;font-size:18px}
+.buy-btn{background:#e94560;color:white;padding:12px;border-radius:10px;text-decoration:none;display:block;font-size:14px;font-weight:bold}
+.footer-nav{position:fixed;bottom:0;left:0;width:100%;background:#1a1a1a;display:flex;justify-content:space-around;padding:18px;border-top:1px solid #333}
+.footer-nav a{color:white;text-decoration:none;font-size:15px}
+</style></head><body>
+<div class="header"><h1>Lukar Shop</h1><p>ပစ္စည်းများကို စျေးနှုန်းချိုသာစွာ ဝယ်ယူနိုင်ပါသည်</p></div>
+<div class="item-grid">
+  <div class="product-card"><div class="product-img">💎</div><div>MLBB Diamond</div><div class="price">၅,၀၀၀ Ks</div><a href="#" class="buy-btn">ဝယ်ယူမည်</a></div>
+  <div class="product-card"><div class="product-img">🎮</div><div>PUBG UC</div><div class="price">၁၀,၀၀၀ Ks</div><a href="#" class="buy-btn">ဝယ်ယူမည်</a></div>
+</div>
+<div class="footer-nav"><a href="#" style="color:#e94560; font-weight:bold">🏠 Home</a><a href="#">💰 Payment</a></div>
+</body></html>
