@@ -40,7 +40,6 @@
         .modal-body { padding: 20px; }
         .modal-input { width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 12px; margin-bottom: 10px; outline: none; box-sizing: border-box; }
         
-        /* MLBB Split Inputs */
         .id-input-row { display: flex; gap: 10px; margin-bottom: 10px; }
         .btn-check-id { width: 100%; padding: 12px; background: #10b981; color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-bottom: 10px; font-size: 13px; }
 
@@ -48,8 +47,9 @@
         .pay-info { display: flex; align-items: center; gap: 10px; }
         .pay-info img { width: 35px; height: 35px; border-radius: 8px; object-fit: cover; }
         .copy-btn { background: #0088cc; color: white; padding: 6px 14px; border-radius: 8px; font-size: 11px; border: none; font-weight: bold; cursor: pointer; }
-        .ss-label { display: block; background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 15px; padding: 12px; text-align: center; cursor: pointer; margin-bottom: 15px; }
-        #ss-preview { max-width: 100%; height: 80px; display: none; margin: 10px auto 0; border-radius: 8px; }
+        
+        .order-notice { background: #fff4e5; border: 1px solid #ffd5a1; color: #663c00; padding: 12px; border-radius: 15px; text-align: center; font-size: 13px; font-weight: bold; margin-bottom: 15px; }
+
         .btn-confirm { flex: 1; padding: 16px; background: #0088cc; border: none; border-radius: 15px; color: #fff; font-weight: bold; cursor: pointer; }
         .btn-cancel { flex: 1; padding: 16px; background: #e2e8f0; border: none; border-radius: 15px; color: #475569; font-weight: bold; cursor: pointer; }
 
@@ -119,10 +119,13 @@
                 <div style="flex:1; padding:12px; background:#f1f5f9; border-radius:12px; text-align:center; font-weight:bold; font-size:13px;" id="m-n">-</div>
                 <div style="flex:1; padding:12px; background:#f1f5f9; border-radius:12px; text-align:center; font-weight:bold; font-size:12px; color:#ef4444;" id="m-p">0 ကျပ်</div>
             </div>
-            <div class="pay-card"><div class="pay-info"><img src="https://i.postimg.cc/V6McmpQY/IMG-1762.jpg"><div><b>K Pay</b><br><small>09776432409</small></div></div><button class="copy-btn" onclick="copyNum('09776432409', 'KPay')">Copy</button></div>
-            <div class="pay-card"><div class="pay-info"><img src="https://i.postimg.cc/Yq8BrQVj/IMG-1763.jpg"><div><b>Wave Pay</b><br><small>09776432409</small></div></div><button class="copy-btn" onclick="copyNum('09776432409', 'Wave Pay')">Copy</button></div>
-            <label for="ss-input" class="ss-label"><i class="fas fa-camera"></i> <span id="ss-text">Screenshot ထည့်ပါ</span><input type="file" id="ss-input" accept="image/*" style="display:none;" onchange="previewSS(this)"><img id="ss-preview"></label>
-            <div style="display:flex; gap:10px;"><button onclick="closeOrder()" class="btn-cancel" id="txt-btn-cancel">မဝယ်ယူသေးပါ</button><button onclick="sendOrder()" class="btn-confirm" id="txt-btn-confirm">ဝယ်ယူမည်</button></div>
+
+            <div class="pay-card"><div class="pay-info"><img src="https://i.postimg.cc/V6McmpQY/IMG-1762.jpg"><div><b>K Pay</b><br><small>09776432409</small><br><b style="font-size: 10px; color: #0088cc;">Name : MYAT BONE KHNAT</b></div></div><button class="copy-btn" onclick="copyNum('09776432409', 'KPay')">Copy</button></div>
+            <div class="pay-card"><div class="pay-info"><img src="https://i.postimg.cc/Yq8BrQVj/IMG-1763.jpg"><div><b>Wave Pay</b><br><small>09776432409</small><br><b style="font-size: 10px; color: #0088cc;">Name : MYAT BONE KHNAT</b></div></div><button class="copy-btn" onclick="copyNum('09776432409', 'Wave Pay')">Copy</button></div>
+            
+            <div class="order-notice">⚠️ Ssနှင့်တကွ အော်ဒါနံပါတ်လာပို့ရန်</div>
+
+            <div style="display:flex; gap:10px;"><button onclick="closeOrder()" class="btn-cancel" id="txt-btn-cancel">မဝယ်ယူသေးပါ</button><button onclick="sendOrder()" class="btn-confirm" id="txt-btn-confirm">အော်ဒါတင်မည်</button></div>
         </div>
     </div>
 </div>
@@ -133,60 +136,34 @@
         "Passes": [{n:"💎 Weekly pass",p:6200},{n:"🤩 Twilight pass",p:32200}],
         "Double Dia": [{n:"💎 50 + 50",p:3500},{n:"💎 150 + 150",p:10700},{n:"💎 250 + 250",p:15000},{n:"💎 500 + 500",p:32800}]
     };
-
-    const pubgData = {
-        "UC Global": [{n:"60 UC",p:3900},{n:"120 UC",p:7800},{n:"180 UC",p:12400},{n:"325 UC",p:19200},{n:"385 UC",p:23100},{n:"660 UC",p:37400},{n:"720 UC",p:43200},{n:"985 UC",p:55600},{n:"1320 UC",p:73800},{n:"1800 UC",p:92500},{n:"3850 UC",p:190000},{n:"8100 UC",p:373000}],
-        "Special": [{n:"Prime Plus",p:45000},{n:"Material Pack",p:15700}]
-    };
-
+    const pubgData = { "UC Global": [{n:"60 UC",p:3900},{n:"120 UC",p:7800},{n:"180 UC",p:12400},{n:"325 UC",p:19200},{n:"385 UC",p:23100},{n:"660 UC",p:37400},{n:"720 UC",p:43200},{n:"985 UC",p:55600},{n:"1320 UC",p:73800},{n:"1800 UC",p:92500},{n:"3850 UC",p:190000},{n:"8100 UC",p:373000}], "Special": [{n:"Prime Plus",p:45000},{n:"Material Pack",p:15700}] };
     const tgData = { "Premium": [{n:"⭐ 1 Month",p:25000},{n:"⭐ 3 Months",p:47000},{n:"⭐ 6 Months",p:75000},{n:"⭐ 1 Year",p:130000}] };
-
-    const tkData = {
-        "🫥 TikTok Views": [
-            {n:"🎬 10K Views",p:1500},
-            {n:"🎬 100K Views",p:9000},
-            {n:"🎬 1M Views",p:55000}
-        ],
-        "💞 TikTok Likes": [
-            {n:"❤️ Like 100 💞",p:500},
-            {n:"❤️ Like 1K",p:3500},
-            {n:"❤️ Myanmar Like 1K",p:4500}
-        ],
-        "🥰 TikTok Followers": [
-            {n:"👤 Follower 100",p:2000},
-            {n:"👤 Follower 1K",p:15000},
-            {n:"👤 Myanmar Follower 1K 🥰",p:25000}
-        ],
-        "↗️ Save & Share": [
-            {n:"🔖 Save/Share 1K",p:2500}
-        ],
-        "😈 TikTok Comments": [
-            {n:"💬 Myanmar Comment 10 😈",p:3500},
-            {n:"💬 Emoji Comment 100",p:6000}
-        ],
-        "📱 TikTok Promote": [
-            {n:"📱 Promote 1$ (Real)",p:7000}
-        ]
-    };
-
+    const tkData = { "🫥 TikTok Views": [{n:"🎬 10K Views",p:1500},{n:"🎬 100K Views",p:9000},{n:"🎬 1M Views",p:55000}], "💞 TikTok Likes": [{n:"❤️ Like 100 💞",p:500},{n:"❤️ Like 1K",p:3500},{n:"❤️ Myanmar Like 1K",p:4500}], "🥰 TikTok Followers": [{n:"👤 Follower 100",p:2000},{n:"👤 Follower 1K",p:15000},{n:"👤 Myanmar Follower 1K 🥰",p:25000}], "↗️ Save & Share": [{n:"🔖 Save/Share 1K",p:2500}], "😈 TikTok Comments": [{n:"💬 Myanmar Comment 10 😈",p:3500},{n:"💬 Emoji Comment 100",p:6000}], "📱 TikTok Promote": [{n:"📱 Promote 1$ (Real)",p:7000}] };
     const capcutData = { "Pro Plan": [{n:"🎬 CapCut Pro - 1 Month", p:5000}] };
 
     let selCat = ""; let selItem = ""; let selPrice = "";
     let currentLang = "MY";
 
     const langData = {
-        MY: { select: "ဝန်ဆောင်မှုရွေးချယ်ပါ", settings: "ပြင်ဆင်ချက်များ", theme: "အလင်းအမှောင်ပြောင်းရန်", lang: "မြန်မာ / English", history: "ဝယ်ယူသူများ၏မှတ်တမ်း", contact: "Owner ဆီစာပို့ရန်", chat: "စကားပြောကြမယ်", home: "ပင်မ", set: "ပြင်ဆင်ချက်", cancel: "မဝယ်ယူသေးပါ", confirm: "ဝယ်ယူမည်", back: "နောက်သို့" },
-        EN: { select: "Select Service", settings: "Settings", theme: "Theme Toggle", lang: "Language", history: "History", contact: "Contact", chat: "Group", home: "Home", set: "Settings", cancel: "Cancel", confirm: "Buy Now", back: "Back" }
+        MY: { select: "ဝန်ဆောင်မှုရွေးချယ်ပါ", settings: "ပြင်ဆင်ချက်များ", theme: "အလင်းအမှောင်ပြောင်းရန်", lang: "မြန်မာ / English", history: "ဝယ်ယူသူများ၏မှတ်တမ်း", contact: "Owner ဆီစာပို့ရန်", chat: "စကားပြောကြမယ်", home: "ပင်မ", set: "ပြင်ဆင်ချက်", cancel: "မဝယ်ယူသေးပါ", confirm: "အော်ဒါတင်မည်", back: "နောက်သို့" },
+        EN: { select: "Select Service", settings: "Settings", theme: "Theme Toggle", lang: "Language", history: "History", contact: "Contact", chat: "Group", home: "Home", set: "Settings", cancel: "Cancel", confirm: "Order Now", back: "Back" }
     };
 
     function switchTab(tab) {
         document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        if(tab==='home') { document.getElementById('home-sec').classList.add('active'); document.getElementById('nav-home').classList.add('active'); }
-        else { document.getElementById('setting-sec').classList.add('active'); document.getElementById('nav-setting').classList.add('active'); }
+        if(tab==='home') { 
+            document.getElementById('home-sec').classList.add('active'); 
+            document.getElementById('nav-home').classList.add('active'); 
+        } else { 
+            document.getElementById('setting-sec').classList.add('active'); 
+            document.getElementById('nav-setting').classList.add('active'); 
+        }
     }
 
-    function toggleDarkMode() { document.body.classList.toggle('light-mode'); }
+    function toggleDarkMode() { 
+        document.body.classList.toggle('light-mode'); 
+    }
 
     function toggleLanguage() {
         currentLang = currentLang === "MY" ? "EN" : "MY";
@@ -212,18 +189,8 @@
         document.getElementById('price-view').style.display = 'block';
         document.getElementById('view-title').innerText = cat;
         const list = document.getElementById('items-list'); list.innerHTML = "";
-        
-        let dataObj = {};
-        if(cat==='MLBB') dataObj = mlData;
-        else if(cat==='PUBG') dataObj = pubgData;
-        else if(cat==='TELEGRAM') dataObj = tgData;
-        else if(cat==='TIKTOK') dataObj = tkData;
-        else if(cat==='CAPCUT') dataObj = capcutData;
-
-        for(let g in dataObj) {
-            list.innerHTML += `<div class="sub-group-title">${g}</div>`;
-            renderGrid(dataObj[g], list, true);
-        }
+        let dataObj = (cat==='MLBB')?mlData:(cat==='PUBG')?pubgData:(cat==='TELEGRAM')?tgData:(cat==='TIKTOK')?tkData:capcutData;
+        for(let g in dataObj) { list.innerHTML += `<div class="sub-group-title">${g}</div>`; renderGrid(dataObj[g], list, true); }
     }
 
     function renderGrid(arr, el, append=false) {
@@ -237,16 +204,13 @@
         selItem = n; selPrice = p;
         document.getElementById('m-n').innerText = n;
         document.getElementById('m-p').innerText = parseInt(p).toLocaleString() + " ကျပ်";
-        
-        // MLBB ဖြစ်ရင် Split Input ပြမယ်၊ ကျန်တာဆိုရင် Normal ID ပြမယ်
-        if(selCat === 'MLBB') {
-            document.getElementById('target-id').style.display = 'none';
-            document.getElementById('mlbb-split').style.display = 'flex';
-        } else {
-            document.getElementById('target-id').style.display = 'block';
-            document.getElementById('mlbb-split').style.display = 'none';
+        if(selCat === 'MLBB') { 
+            document.getElementById('target-id').style.display = 'none'; 
+            document.getElementById('mlbb-split').style.display = 'flex'; 
+        } else { 
+            document.getElementById('target-id').style.display = 'block'; 
+            document.getElementById('mlbb-split').style.display = 'none'; 
         }
-        
         document.getElementById('btn-checker').innerText = "Check ID Status";
         document.getElementById('btn-checker').style.background = "#10b981";
         document.getElementById('modal-overlay').style.display = 'flex';
@@ -255,13 +219,9 @@
     function checkStatus() {
         const btn = document.getElementById('btn-checker');
         btn.innerText = "Checking...";
-        setTimeout(() => {
-            btn.innerText = "ID Status: Verified ✅";
-            btn.style.background = "#059669";
-        }, 1200);
+        setTimeout(() => { btn.innerText = "ID Status: Verified ✅"; btn.style.background = "#059669"; }, 1200);
     }
 
-    function previewSS(input) { if (input.files && input.files[0]) { const reader = new FileReader(); reader.onload = e => { document.getElementById('ss-preview').src = e.target.result; document.getElementById('ss-preview').style.display = 'block'; }; reader.readAsDataURL(input.files[0]); } }
     function closeOrder() { document.getElementById('modal-overlay').style.display = 'none'; }
     function goHome() { document.getElementById('main-home').style.display = 'block'; document.getElementById('price-view').style.display = 'none'; }
     function copyNum(n, t) { navigator.clipboard.writeText(n); alert(t + " Copied!"); }
@@ -278,8 +238,8 @@
             if(idString.length < 3) return alert("ID အချက်အလက် ဖြည့်ပါ");
         }
         
-        if(!document.getElementById('ss-input').files[0]) return alert("Screenshot ထည့်ပါ");
-        const msg = `--- NEW ORDER ---%0ACategory: ${selCat}%0AItem: ${selItem}%0APrice: ${selPrice} ကျပ်%0AID: ${idString}`;
+        const orderID = "ORD-" + Math.floor(1000 + Math.random() * 9000);
+        const msg = `--- NEW ORDER ---%0AOrder ID: ${orderID}%0ACategory: ${selCat}%0AItem: ${selItem}%0APrice: ${selPrice} ကျပ်%0AID: ${idString}%0A%0A⚠️ Ssနှင့်တကွ အော်ဒါနံပါတ် (${orderID}) ကို Telegram သို့ ပေးပို့ပေးပါခင်ဗျာ။`;
         window.location.href = `https://t.me/offical_Lukar?text=${msg}`;
     }
 </script>
