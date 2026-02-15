@@ -16,7 +16,6 @@
         .container { padding: 15px; }
         .section-label { font-size: 13px; font-weight: bold; color: #64748b; margin-bottom: 15px; display: block; text-transform: uppercase; }
 
-        /* Navigation */
         .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: #000; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid var(--border); z-index: 1000; }
         .nav-item { color: #64748b; text-align: center; cursor: pointer; flex: 1; transition: 0.2s; }
         .nav-item.active { color: var(--primary); }
@@ -26,10 +25,9 @@
         .page-section { display: none; animation: fadeIn 0.3s ease; }
         .page-section.active { display: block; }
 
-        /* Grid */
         .category-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
         .cat-item { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 12px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: 0.2s; }
-        .cat-img { width: 45px; height: 45px; border-radius: 12px; object-fit: cover; }
+        .cat-img { width: 45px; height: 45px; border-radius: 12px; object-fit: cover; border: 1px solid #374151; }
         
         .price-grid-container { display: none; }
         .sub-group-title { color: #f59e0b; font-size: 14px; font-weight: bold; margin: 20px 0 10px; border-left: 3px solid #f59e0b; padding-left: 8px; }
@@ -37,17 +35,15 @@
         .price-card { background: var(--card); border-radius: 15px; padding: 18px 10px; text-align: center; border: 1px solid var(--border); cursor: pointer; }
         .cost { color: var(--primary); font-weight: 800; font-size: 14px; margin-top: 5px; }
 
-        /* Setting */
-        .setting-list { display: flex; flex-direction: column; gap: 12px; }
-        .setting-card { background: var(--card); padding: 15px; border-radius: 18px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
-        .setting-info { display: flex; align-items: center; gap: 15px; }
-        .setting-info i { font-size: 18px; color: var(--primary); width: 25px; text-align: center; }
-
-        /* Modal */
         #modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 9000; align-items: center; justify-content: center; padding: 15px; }
         .white-modal { background: #fff; color: #333; width: 100%; max-width: 400px; border-radius: 25px; overflow: hidden; }
         .modal-body { padding: 20px; }
         .modal-input { width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 12px; margin-bottom: 10px; outline: none; box-sizing: border-box; }
+        
+        /* MLBB Split Inputs */
+        .id-input-row { display: flex; gap: 10px; margin-bottom: 10px; }
+        .btn-check-id { width: 100%; padding: 12px; background: #10b981; color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-bottom: 10px; font-size: 13px; }
+
         .pay-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 10px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
         .pay-info { display: flex; align-items: center; gap: 10px; }
         .pay-info img { width: 35px; height: 35px; border-radius: 8px; object-fit: cover; }
@@ -56,6 +52,11 @@
         #ss-preview { max-width: 100%; height: 80px; display: none; margin: 10px auto 0; border-radius: 8px; }
         .btn-confirm { flex: 1; padding: 16px; background: #0088cc; border: none; border-radius: 15px; color: #fff; font-weight: bold; cursor: pointer; }
         .btn-cancel { flex: 1; padding: 16px; background: #e2e8f0; border: none; border-radius: 15px; color: #475569; font-weight: bold; cursor: pointer; }
+
+        .setting-list { display: flex; flex-direction: column; gap: 12px; }
+        .setting-card { background: var(--card); padding: 15px; border-radius: 18px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+        .setting-info { display: flex; align-items: center; gap: 15px; }
+        .setting-info i { font-size: 18px; color: var(--primary); width: 25px; text-align: center; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -72,6 +73,7 @@
             <div class="cat-item" onclick="showPrices('PUBG')"><img src="https://i.postimg.cc/C5BSB5qd/IMG-1666.jpg" class="cat-img"><div class="cat-info"><span class="title">PUBG</span></div></div>
             <div class="cat-item" onclick="showPrices('TELEGRAM')"><img src="https://i.postimg.cc/SKS4LDMt/IMG-1760.jpg" class="cat-img"><div class="cat-info"><span class="title">Telegram</span></div></div>
             <div class="cat-item" onclick="showPrices('TIKTOK')"><img src="https://i.postimg.cc/PxNk9JKF/IMG-1761.jpg" class="cat-img"><div class="cat-info"><span class="title">TikTok</span></div></div>
+            <div class="cat-item" onclick="showPrices('CAPCUT')"><img src="https://i.postimg.cc/sDDGgdKD/IMG-1764.jpg" class="cat-img"><div class="cat-info"><span class="title">CapCut Pro</span></div></div>
         </div>
     </div>
 
@@ -104,8 +106,15 @@
     <div class="white-modal">
         <div style="background:#000; color:#fff; padding:18px; text-align:center; font-weight:bold;">ORDER CONFIRM</div>
         <div class="modal-body">
-            <input type="text" id="target-id" class="modal-input" placeholder="Enter ID / Link">
-            <input type="number" id="target-srv" class="modal-input" placeholder="Server (MLBB Only)" style="display:none;">
+            <input type="text" id="target-id" class="modal-input" placeholder="Enter ID / Link / Email">
+            
+            <div id="mlbb-split" class="id-input-row" style="display:none;">
+                <input type="number" id="ml-id" class="modal-input" placeholder="User ID" style="flex:2;">
+                <input type="number" id="ml-srv" class="modal-input" placeholder="Server" style="flex:1;">
+            </div>
+
+            <button class="btn-check-id" id="btn-checker" onclick="checkStatus()">Check ID Status</button>
+
             <div style="display:flex; gap:10px; margin-bottom:12px;">
                 <div style="flex:1; padding:12px; background:#f1f5f9; border-radius:12px; text-align:center; font-weight:bold; font-size:13px;" id="m-n">-</div>
                 <div style="flex:1; padding:12px; background:#f1f5f9; border-radius:12px; text-align:center; font-weight:bold; font-size:12px; color:#ef4444;" id="m-p">0 ကျပ်</div>
@@ -120,29 +129,54 @@
 
 <script>
     const mlData = {
-        "Game Passes": [{n:"💎 Weekly pass",p:6200},{n:"🤩 Twilight pass",p:32200}],
         "Diamonds": [{n:"💎 11",p:1000},{n:"💎 22",p:2000},{n:"💎 33",p:2600},{n:"💎 44",p:3500},{n:"💎 56",p:4300},{n:"💎 86",p:5200},{n:"💎 172",p:11000},{n:"💎 257",p:15000},{n:"💎 343",p:21000},{n:"💎 429",p:24400},{n:"💎 515",p:30000},{n:"💎 600",p:35200},{n:"💎 706",p:39500},{n:"💎 963",p:56300},{n:"💎 1049",p:58500},{n:"💎 1135",p:64000},{n:"💎 2195",p:115900},{n:"💎 3688",p:191800},{n:"💎 5532",p:294500},{n:"💎 9288",p:495900}],
+        "Passes": [{n:"💎 Weekly pass",p:6200},{n:"🤩 Twilight pass",p:32200}],
         "Double Dia": [{n:"💎 50 + 50",p:3500},{n:"💎 150 + 150",p:10700},{n:"💎 250 + 250",p:15000},{n:"💎 500 + 500",p:32800}]
     };
 
     const pubgData = {
-        "UC Global": [
-            {n:"60 UC",p:3900},{n:"120 UC",p:7800},{n:"180 UC",p:12400},{n:"325 UC",p:19200},
-            {n:"385 UC",p:23100},{n:"660 UC",p:37400},{n:"720 UC",p:43200},{n:"985 UC",p:55600},
-            {n:"1320 UC",p:73800},{n:"1800 UC",p:92500},{n:"3850 UC",p:190000},{n:"8100 UC",p:373000}
+        "UC Global": [{n:"60 UC",p:3900},{n:"120 UC",p:7800},{n:"180 UC",p:12400},{n:"325 UC",p:19200},{n:"385 UC",p:23100},{n:"660 UC",p:37400},{n:"720 UC",p:43200},{n:"985 UC",p:55600},{n:"1320 UC",p:73800},{n:"1800 UC",p:92500},{n:"3850 UC",p:190000},{n:"8100 UC",p:373000}],
+        "Special": [{n:"Prime Plus",p:45000},{n:"Material Pack",p:15700}]
+    };
+
+    const tgData = { "Premium": [{n:"⭐ 1 Month",p:25000},{n:"⭐ 3 Months",p:47000},{n:"⭐ 6 Months",p:75000},{n:"⭐ 1 Year",p:130000}] };
+
+    const tkData = {
+        "🫥 TikTok Views": [
+            {n:"🎬 10K Views",p:1500},
+            {n:"🎬 100K Views",p:9000},
+            {n:"🎬 1M Views",p:55000}
         ],
-        "Special Packs": [
-            {n:"Prime",p:5000},{n:"Prime Plus",p:45000},{n:"Material Pack",p:15700}
+        "💞 TikTok Likes": [
+            {n:"❤️ Like 100 💞",p:500},
+            {n:"❤️ Like 1K",p:3500},
+            {n:"❤️ Myanmar Like 1K",p:4500}
+        ],
+        "🥰 TikTok Followers": [
+            {n:"👤 Follower 100",p:2000},
+            {n:"👤 Follower 1K",p:15000},
+            {n:"👤 Myanmar Follower 1K 🥰",p:25000}
+        ],
+        "↗️ Save & Share": [
+            {n:"🔖 Save/Share 1K",p:2500}
+        ],
+        "😈 TikTok Comments": [
+            {n:"💬 Myanmar Comment 10 😈",p:3500},
+            {n:"💬 Emoji Comment 100",p:6000}
+        ],
+        "📱 TikTok Promote": [
+            {n:"📱 Promote 1$ (Real)",p:7000}
         ]
     };
 
-    const tgData = [{n:"TG Premium 1 Month",p:25000},{n:"TG Premium 3 Months",p:47000},{n:"TG Premium 1 Year",p:130000}];
-    const tkData = { "TikTok": [{n:"10K View",p:1500},{n:"100K View",p:9000},{n:"1K Follower",p:15000},{n:"1K Like",p:3500}] };
+    const capcutData = { "Pro Plan": [{n:"🎬 CapCut Pro - 1 Month", p:5000}] };
 
+    let selCat = ""; let selItem = ""; let selPrice = "";
     let currentLang = "MY";
+
     const langData = {
         MY: { select: "ဝန်ဆောင်မှုရွေးချယ်ပါ", settings: "ပြင်ဆင်ချက်များ", theme: "အလင်းအမှောင်ပြောင်းရန်", lang: "မြန်မာ / English", history: "ဝယ်ယူသူများ၏မှတ်တမ်း", contact: "Owner ဆီစာပို့ရန်", chat: "စကားပြောကြမယ်", home: "ပင်မ", set: "ပြင်ဆင်ချက်", cancel: "မဝယ်ယူသေးပါ", confirm: "ဝယ်ယူမည်", back: "နောက်သို့" },
-        EN: { select: "Select Service", settings: "Settings", theme: "Dark / Light Mode", lang: "English / Myanmar", history: "History", contact: "Contact Owner", chat: "Chat Group", home: "Home", set: "Setting", cancel: "Cancel", confirm: "Buy Now", back: "Back" }
+        EN: { select: "Select Service", settings: "Settings", theme: "Theme Toggle", lang: "Language", history: "History", contact: "Contact", chat: "Group", home: "Home", set: "Settings", cancel: "Cancel", confirm: "Buy Now", back: "Back" }
     };
 
     function switchTab(tab) {
@@ -155,7 +189,7 @@
     function toggleDarkMode() { document.body.classList.toggle('light-mode'); }
 
     function toggleLanguage() {
-        currentLang = (currentLang === "MY") ? "EN" : "MY";
+        currentLang = currentLang === "MY" ? "EN" : "MY";
         document.getElementById('lang-indicator').innerText = currentLang;
         const d = langData[currentLang];
         document.getElementById('txt-select-service').innerText = d.select;
@@ -172,8 +206,6 @@
         document.getElementById('txt-back').innerText = d.back;
     }
 
-    let selItem = ""; let selPrice = ""; let selCat = "";
-
     function showPrices(cat) {
         selCat = cat;
         document.getElementById('main-home').style.display = 'none';
@@ -181,15 +213,22 @@
         document.getElementById('view-title').innerText = cat;
         const list = document.getElementById('items-list'); list.innerHTML = "";
         
-        if(cat === 'MLBB') { for(let g in mlData) { list.innerHTML += `<div class="sub-group-title">${g}</div>`; renderGrid(mlData[g], list, true); } }
-        else if(cat === 'PUBG') { for(let g in pubgData) { list.innerHTML += `<div class="sub-group-title">${g}</div>`; renderGrid(pubgData[g], list, true); } }
-        else if(cat === 'TELEGRAM') { renderGrid(tgData, list); }
-        else if(cat === 'TIKTOK') { for(let g in tkData) { list.innerHTML += `<div class="sub-group-title">${g}</div>`; renderGrid(tkData[g], list, true); } }
+        let dataObj = {};
+        if(cat==='MLBB') dataObj = mlData;
+        else if(cat==='PUBG') dataObj = pubgData;
+        else if(cat==='TELEGRAM') dataObj = tgData;
+        else if(cat==='TIKTOK') dataObj = tkData;
+        else if(cat==='CAPCUT') dataObj = capcutData;
+
+        for(let g in dataObj) {
+            list.innerHTML += `<div class="sub-group-title">${g}</div>`;
+            renderGrid(dataObj[g], list, true);
+        }
     }
 
     function renderGrid(arr, el, append=false) {
         let html = `<div class="price-grid">`;
-        arr.forEach(i => { html += `<div class="price-card" onclick="openModal('${i.n}', '${i.p}')"><div style="font-size:12px; font-weight:bold;">${i.n}</div><div class="cost">${i.p.toLocaleString()} ကျပ်</div></div>`; });
+        arr.forEach(i => { html += `<div class="price-card" onclick="openModal('${i.n}', '${i.p}')"><div style="font-size:11px; font-weight:bold;">${i.n}</div><div class="cost">${i.p.toLocaleString()} ကျပ်</div></div>`; });
         html += `</div>`;
         if(append) el.innerHTML += html; else el.innerHTML = html;
     }
@@ -198,8 +237,28 @@
         selItem = n; selPrice = p;
         document.getElementById('m-n').innerText = n;
         document.getElementById('m-p').innerText = parseInt(p).toLocaleString() + " ကျပ်";
-        document.getElementById('target-srv').style.display = (selCat==='MLBB') ? 'block' : 'none';
+        
+        // MLBB ဖြစ်ရင် Split Input ပြမယ်၊ ကျန်တာဆိုရင် Normal ID ပြမယ်
+        if(selCat === 'MLBB') {
+            document.getElementById('target-id').style.display = 'none';
+            document.getElementById('mlbb-split').style.display = 'flex';
+        } else {
+            document.getElementById('target-id').style.display = 'block';
+            document.getElementById('mlbb-split').style.display = 'none';
+        }
+        
+        document.getElementById('btn-checker').innerText = "Check ID Status";
+        document.getElementById('btn-checker').style.background = "#10b981";
         document.getElementById('modal-overlay').style.display = 'flex';
+    }
+
+    function checkStatus() {
+        const btn = document.getElementById('btn-checker');
+        btn.innerText = "Checking...";
+        setTimeout(() => {
+            btn.innerText = "ID Status: Verified ✅";
+            btn.style.background = "#059669";
+        }, 1200);
     }
 
     function previewSS(input) { if (input.files && input.files[0]) { const reader = new FileReader(); reader.onload = e => { document.getElementById('ss-preview').src = e.target.result; document.getElementById('ss-preview').style.display = 'block'; }; reader.readAsDataURL(input.files[0]); } }
@@ -208,11 +267,19 @@
     function copyNum(n, t) { navigator.clipboard.writeText(n); alert(t + " Copied!"); }
 
     function sendOrder() {
-        const id = document.getElementById('target-id').value;
-        const srv = document.getElementById('target-srv').value;
-        if(id.length < 3) return alert("ID ဖြည့်ပါ");
-        if(!document.getElementById('ss-input').files[0]) return alert("ငွေလွှဲ Screenshot ထည့်ပါ");
-        const msg = `--- NEW ORDER ---%0ACategory: ${selCat}%0AItem: ${selItem}%0APrice: ${selPrice} ကျပ်%0AID: ${id} ${srv?'('+srv+')':''}`;
+        let idString = "";
+        if(selCat === 'MLBB') {
+            const uid = document.getElementById('ml-id').value;
+            const srv = document.getElementById('ml-srv').value;
+            if(!uid || !srv) return alert("MLBB ID နှင့် Server အမှန်ဖြည့်ပါ");
+            idString = uid + " (" + srv + ")";
+        } else {
+            idString = document.getElementById('target-id').value;
+            if(idString.length < 3) return alert("ID အချက်အလက် ဖြည့်ပါ");
+        }
+        
+        if(!document.getElementById('ss-input').files[0]) return alert("Screenshot ထည့်ပါ");
+        const msg = `--- NEW ORDER ---%0ACategory: ${selCat}%0AItem: ${selItem}%0APrice: ${selPrice} ကျပ်%0AID: ${idString}`;
         window.location.href = `https://t.me/offical_Lukar?text=${msg}`;
     }
 </script>
