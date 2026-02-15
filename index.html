@@ -3,251 +3,217 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LUKAR SHOP | Premium Game Store</title>
+    <title>LUKAR SHOP - Official Store</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --primary: #00f2fe; --bg: #030712; --text: #ffffff; }
-        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; padding-bottom: 80px; }
+        :root { --primary: #00f2fe; --bg: #030712; --card: #111827; --text: #ffffff; --border: #1f2937; }
+        .light-mode { --bg: #f3f4f6; --card: #ffffff; --text: #111827; --border: #e5e7eb; }
 
-        /* --- Login (Background Only Here) --- */
-        #login-screen { 
-            display: flex; height: 100vh; width: 100%; position: fixed; top: 0; z-index: 2000;
-            background: url('https://i.postimg.cc/v8KvbfNS/IMG-1757.jpg') no-repeat center center;
-            background-size: cover; align-items: center; justify-content: center;
-        }
-        .login-card { background: transparent; width: 85%; max-width: 350px; padding: 40px 20px; border: 2.5px solid var(--primary); border-radius: 35px; text-align: center; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; padding-bottom: 80px; transition: 0.3s; overflow-x: hidden; }
+        .header { background: #000; padding: 20px; text-align: center; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 1000; }
+        .header-title { font-weight: 900; font-size: 22px; letter-spacing: 2px; margin: 0; color: #fff; }
+        
+        .container { padding: 15px; }
+        .section-label { font-size: 13px; font-weight: bold; color: #64748b; margin-bottom: 15px; display: block; text-transform: uppercase; }
 
-        /* --- Header & Screens --- */
-        #main-app { display: none; }
-        .header { background: #000; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1f2937; position: sticky; top: 0; z-index: 100; }
-        .bal-display { background: #1e293b; padding: 8px 12px; border-radius: 10px; font-weight: bold; border: 1px solid #334155; }
-        .screen { display: none; padding: 20px; animation: fadeIn 0.3s ease; }
-        .screen.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* --- Game Grid & Prices --- */
-        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-        .game-card { background: #111827; border-radius: 15px; padding: 20px; text-align: center; border: 1px solid #1f2937; cursor: pointer; }
-        .game-card img { width: 65px; height: 65px; border-radius: 12px; margin-bottom: 10px; }
-        .item-list { background: #111827; padding: 5px; border-radius: 15px; margin-top: 20px; border: 1px solid #1f2937; }
-        .price-row { display: flex; justify-content: space-between; padding: 18px; border-bottom: 1px solid #1f2937; cursor: pointer; }
-
-        /* --- White Purchase Modal (Screenshot Style) --- */
-        #modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1500; align-items: center; justify-content: center; padding: 15px; }
-        .modal { background: #ffffff; color: #333; width: 100%; max-width: 400px; border-radius: 15px; overflow: hidden; }
-        .modal-header { background: #000; color: #fff; padding: 15px; text-align: center; font-weight: bold; }
-        .modal-body { padding: 20px; }
-        .input-box { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; margin: 8px 0 15px; outline: none; }
-        .row-info { display: flex; gap: 10px; margin: 15px 0; }
-        .info-box { flex: 1; padding: 12px; background: #f1f5f9; border-radius: 8px; text-align: center; font-weight: bold; font-size: 13px; color: #000; }
-        .balance-box { background: #e0e7ff; color: #1e3a8a; padding: 12px; border-radius: 8px; text-align: center; font-weight: bold; margin-bottom: 15px; }
-        .check-group { display: flex; align-items: center; gap: 8px; color: #ef4444; font-size: 13px; font-weight: bold; }
-        .modal-footer { display: flex; gap: 10px; padding: 0 20px 20px; }
-        .btn { flex: 1; padding: 14px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
-        .btn-cancel { background: #fff; border: 1.5px solid #3b82f6; color: #3b82f6; }
-        .btn-buy { background: #22c55e; color: #fff; }
-
-        /* --- Topup Screenshot Section --- */
-        .file-upload { 
-            background: #1e293b; border: 2px dashed #334155; padding: 20px; 
-            border-radius: 15px; text-align: center; cursor: pointer; margin-bottom: 20px;
-        }
-        .file-upload i { font-size: 30px; color: var(--primary); margin-bottom: 10px; }
-        #preview-img { width: 100%; border-radius: 10px; display: none; margin-top: 10px; }
-
-        /* --- Nav Bar --- */
-        .nav-bar { position: fixed; bottom: 0; width: 100%; background: #000; display: flex; justify-content: space-around; padding: 15px 0 25px; border-top: 1px solid #1f2937; }
-        .nav-item { color: #64748b; font-size: 24px; flex: 1; text-align: center; }
+        /* Navigation */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: #000; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid var(--border); z-index: 1000; }
+        .nav-item { color: #64748b; text-align: center; cursor: pointer; flex: 1; transition: 0.2s; }
         .nav-item.active { color: var(--primary); }
+        .nav-item i { font-size: 20px; display: block; margin-bottom: 4px; }
+        .nav-item span { font-size: 11px; font-weight: bold; }
+
+        .page-section { display: none; animation: fadeIn 0.3s ease; }
+        .page-section.active { display: block; }
+
+        /* Grid */
+        .category-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        .cat-item { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 12px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: 0.2s; }
+        .cat-img { width: 45px; height: 45px; border-radius: 12px; object-fit: cover; }
+        
+        .price-grid-container { display: none; }
+        .sub-group-title { color: #f59e0b; font-size: 14px; font-weight: bold; margin: 20px 0 10px; border-left: 3px solid #f59e0b; padding-left: 8px; }
+        .price-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .price-card { background: var(--card); border-radius: 15px; padding: 18px 10px; text-align: center; border: 1px solid var(--border); cursor: pointer; }
+        .cost { color: var(--primary); font-weight: 800; font-size: 14px; margin-top: 5px; }
+
+        /* Setting */
+        .setting-list { display: flex; flex-direction: column; gap: 12px; }
+        .setting-card { background: var(--card); padding: 15px; border-radius: 18px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+        .setting-info { display: flex; align-items: center; gap: 15px; }
+        .setting-info i { font-size: 18px; color: var(--primary); width: 25px; text-align: center; }
+
+        /* Modal */
+        #modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 9000; align-items: center; justify-content: center; padding: 15px; }
+        .white-modal { background: #fff; color: #333; width: 100%; max-width: 400px; border-radius: 25px; overflow: hidden; }
+        .modal-body { padding: 20px; }
+        .modal-input { width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 12px; margin-bottom: 10px; outline: none; box-sizing: border-box; }
+        .pay-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 10px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
+        .pay-info { display: flex; align-items: center; gap: 10px; }
+        .pay-info img { width: 35px; height: 35px; border-radius: 8px; object-fit: cover; }
+        .copy-btn { background: #0088cc; color: white; padding: 6px 14px; border-radius: 8px; font-size: 11px; border: none; font-weight: bold; cursor: pointer; }
+        .ss-label { display: block; background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 15px; padding: 12px; text-align: center; cursor: pointer; margin-bottom: 15px; }
+        #ss-preview { max-width: 100%; height: 80px; display: none; margin: 10px auto 0; border-radius: 8px; }
+        .btn-confirm { flex: 1; padding: 16px; background: #0088cc; border: none; border-radius: 15px; color: #fff; font-weight: bold; cursor: pointer; }
+        .btn-cancel { flex: 1; padding: 16px; background: #e2e8f0; border: none; border-radius: 15px; color: #475569; font-weight: bold; cursor: pointer; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-<div id="login-screen">
-    <div class="login-card">
-        <h1 style="color:var(--primary); font-weight:900;">LUKAR SHOP</h1>
-        <input type="text" id="login_id" style="width:100%; padding:15px; background:rgba(0,0,0,0.5); border:1.5px solid #fff; border-radius:15px; color:white; margin-bottom:15px;" placeholder="Phone (09776432409)">
-        <input type="password" id="login_ps" style="width:100%; padding:15px; background:rgba(0,0,0,0.5); border:1.5px solid #fff; border-radius:15px; color:white; margin-bottom:25px;" placeholder="Password (lukar123)">
-        <button onclick="doLogin()" style="width:100%; padding:16px; background:var(--primary); border:none; border-radius:15px; font-weight:900;">LOGIN</button>
+<header class="header"><h1 class="header-title">LUKAR SHOP</h1></header>
+
+<div id="home-sec" class="page-section active">
+    <div class="container" id="main-home">
+        <span class="section-label" id="txt-select-service">ဝန်ဆောင်မှုရွေးချယ်ပါ</span>
+        <div class="category-grid">
+            <div class="cat-item" onclick="showPrices('MLBB')"><img src="https://i.postimg.cc/K8XvTPfw/IMG-1665.jpg" class="cat-img"><div class="cat-info"><span class="title">MLBB</span></div></div>
+            <div class="cat-item" onclick="showPrices('PUBG')"><img src="https://i.postimg.cc/C5BSB5qd/IMG-1666.jpg" class="cat-img"><div class="cat-info"><span class="title">PUBG</span></div></div>
+            <div class="cat-item" onclick="showPrices('TELEGRAM')"><img src="https://i.postimg.cc/SKS4LDMt/IMG-1760.jpg" class="cat-img"><div class="cat-info"><span class="title">Telegram</span></div></div>
+            <div class="cat-item" onclick="showPrices('TIKTOK')"><img src="https://i.postimg.cc/PxNk9JKF/IMG-1761.jpg" class="cat-img"><div class="cat-info"><span class="title">TikTok</span></div></div>
+        </div>
+    </div>
+
+    <div class="container price-grid-container" id="price-view">
+        <div style="color:var(--primary); cursor:pointer; font-weight:bold; margin-bottom:15px;" onclick="goHome()"><i class="fas fa-chevron-left"></i> <span id="txt-back">နောက်သို့</span></div>
+        <h2 id="view-title" style="font-size:20px; margin-bottom:5px;"></h2>
+        <div id="items-list"></div>
     </div>
 </div>
 
-<div id="main-app">
-    <div class="header">
-        <div style="font-weight:900; font-size:20px;">LUKAR SHOP</div>
-        <div class="bal-display" onclick="switchScreen('settings')"><span id="header-bal">0</span> Ks +</div>
-    </div>
-
-    <div id="home-screen" class="screen active">
-        <div class="grid">
-            <div class="game-card" onclick="showPrices('MLBB')">
-                <img src="https://gameloot.in/wp-content/uploads/2020/10/Mobile-Legends-Bang-Bang-Diamond.png">
-                <br><b>MLBB</b>
-            </div>
-            <div class="game-card" onclick="showPrices('PUBG')">
-                <img src="https://www.pubgmobile.com/common/images/icon_uc.png">
-                <br><b>PUBG UC</b>
-            </div>
+<div id="setting-sec" class="page-section">
+    <div class="container">
+        <span class="section-label" id="txt-settings">ပြင်ဆင်ချက်များ</span>
+        <div class="setting-list">
+            <div class="setting-card" onclick="toggleDarkMode()"><div class="setting-info"><i class="fas fa-adjust"></i> <span id="txt-theme">အလင်းအမှောင်ပြောင်းရန်</span></div><i class="fas fa-moon"></i></div>
+            <div class="setting-card" onclick="toggleLanguage()"><div class="setting-info"><i class="fas fa-globe"></i> <span id="txt-lang">မြန်မာ / English</span></div><span style="font-size:12px; font-weight:bold; color:var(--primary);" id="lang-indicator">MY</span></div>
+            <div class="setting-card" onclick="window.location.href='https://t.me/lukargameshopreviwe'"><div class="setting-info"><i class="fas fa-history"></i> <span id="txt-history">ဝယ်ယူသူများ၏မှတ်တမ်း</span></div><i class="fas fa-external-link-alt"></i></div>
+            <div class="setting-card" onclick="window.location.href='https://t.me/offical_Lukar'"><div class="setting-info"><i class="fab fa-telegram"></i> <span id="txt-contact">Owner ဆီစာပို့ရန်</span></div><i class="fas fa-user-check"></i></div>
+            <div class="setting-card" onclick="window.location.href='https://t.me/Lukarfamily'"><div class="setting-info"><i class="fas fa-comments"></i> <span id="txt-chat">စကားပြောကြမယ်</span></div><i class="fas fa-users"></i></div>
         </div>
-        <div id="price-menu" style="display:none; margin-top:25px;">
-            <h3 id="game-title" style="color:var(--primary); margin-left:5px;">Item Menu</h3>
-            <div class="item-list" id="items-container"></div>
-        </div>
-    </div>
-
-    <div id="settings-screen" class="screen">
-        <h3>My Account</h3>
-        <div style="background:#111827; padding:25px; border-radius:20px; border:1.5px solid var(--primary); margin-bottom:20px;">
-            <div style="font-size:12px; opacity:0.6;">Current Balance</div>
-            <div style="font-size:32px; font-weight:900; color:var(--primary);"><span id="set-bal">0</span> Ks</div>
-        </div>
-        <button onclick="switchScreen('topup')" style="width:100%; padding:18px; background:#111827; border:none; border-radius:15px; color:white; margin-bottom:12px; text-align:left;"><i class="fas fa-wallet"></i> Deposit Funds</button>
-        <button onclick="doLogout()" style="width:100%; padding:18px; background:#111827; border:none; border-radius:15px; color:#ff4d4d; text-align:left;"><i class="fas fa-sign-out-alt"></i> Logout</button>
-    </div>
-
-    <div id="topup-screen" class="screen">
-        <div onclick="switchScreen('settings')" style="margin-bottom:20px; color:var(--primary); cursor:pointer;"><i class="fas fa-arrow-left"></i> BACK</div>
-        <h3>Top Up Wallet</h3>
-        <div style="background:#111827; padding:15px; border-radius:15px; margin-bottom:20px; border:1px solid #1f2937;">
-            <p style="margin:0 0 5px 0; font-size:13px; color:#94a3b8;">KPay / Wave</p>
-            <b style="font-size:18px;">09776432409</b><br>
-            <span style="color:var(--primary);">Name: Myat Bone Khant</span>
-        </div>
-
-        <label style="display:block; margin-bottom:10px;">ငွေဖြည့်မည့်ပမာဏ (Ks)</label>
-        <input type="number" id="top-amt" class="input-box" style="background:#000; color:white; border-color:#334155;" placeholder="Amount">
-        
-        <label style="display:block; margin-bottom:10px;">ငွေလွှဲပြေစာ (Screenshot)</label>
-        <div class="file-upload" onclick="document.getElementById('file-input').click()">
-            <i class="fas fa-cloud-upload-alt"></i>
-            <p id="file-text" style="margin:0; font-size:13px;">ပုံရွေးချယ်ရန် နှိပ်ပါ</p>
-            <img id="preview-img">
-        </div>
-        <input type="file" id="file-input" hidden accept="image/*" onchange="previewFile()">
-
-        <button onclick="processTopup()" style="width:100%; padding:18px; background:var(--primary); border:none; border-radius:15px; font-weight:900; color:black;">DEPOSIT REQUEST</button>
-    </div>
-
-    <div class="nav-bar">
-        <div class="nav-item active" id="nav-home" onclick="switchScreen('home')"><i class="fas fa-th-large"></i></div>
-        <div class="nav-item" id="nav-settings" onclick="switchScreen('settings')"><i class="fas fa-user-circle"></i></div>
     </div>
 </div>
+
+<nav class="bottom-nav">
+    <div class="nav-item active" id="nav-home" onclick="switchTab('home')"><i class="fas fa-home"></i><span id="txt-nav-home">ပင်မ</span></div>
+    <div class="nav-item" id="nav-setting" onclick="switchTab('setting')"><i class="fas fa-cog"></i><span id="txt-nav-setting">ပြင်ဆင်ချက်</span></div>
+</nav>
 
 <div id="modal-overlay">
-    <div class="modal">
-        <div class="modal-header">အချက်အလက်များဖြည့်သွင်းပါ</div>
+    <div class="white-modal">
+        <div style="background:#000; color:#fff; padding:18px; text-align:center; font-weight:bold;">ORDER CONFIRM</div>
         <div class="modal-body">
-            <label>Game ID</label>
-            <input type="number" id="game_id" class="input-box" placeholder="ID ရိုက်ထည့်ပါ">
-            <div class="row-info">
-                <div class="info-box" id="item_name">-</div>
-                <div class="info-box" id="item_price">0 Ks</div>
+            <input type="text" id="target-id" class="modal-input" placeholder="Enter ID / Link">
+            <input type="number" id="target-srv" class="modal-input" placeholder="Server (MLBB Only)" style="display:none;">
+            <div style="display:flex; gap:10px; margin-bottom:12px;">
+                <div style="flex:1; padding:12px; background:#f1f5f9; border-radius:12px; text-align:center; font-weight:bold; font-size:13px;" id="m-n">-</div>
+                <div style="flex:1; padding:12px; background:#f1f5f9; border-radius:12px; text-align:center; font-weight:bold; font-size:12px; color:#ef4444;" id="m-p">0 ကျပ်</div>
             </div>
-            <div class="balance-box">လက်ကျန်ငွေ = <span id="modal-bal">0</span> Ks</div>
-            <div class="check-group"><input type="checkbox" id="confirm_check"><label for="confirm_check">အချက်အလက်များမှန်ကန်ပါတယ်</label></div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-cancel" onclick="closeModal()">မဝယ်သေးပါ</button>
-            <button class="btn btn-buy" onclick="confirmPurchase()">ဝယ်မည်</button>
+            <div class="pay-card"><div class="pay-info"><img src="https://i.postimg.cc/V6McmpQY/IMG-1762.jpg"><div><b>K Pay</b><br><small>09776432409</small></div></div><button class="copy-btn" onclick="copyNum('09776432409', 'KPay')">Copy</button></div>
+            <div class="pay-card"><div class="pay-info"><img src="https://i.postimg.cc/Yq8BrQVj/IMG-1763.jpg"><div><b>Wave Pay</b><br><small>09776432409</small></div></div><button class="copy-btn" onclick="copyNum('09776432409', 'Wave Pay')">Copy</button></div>
+            <label for="ss-input" class="ss-label"><i class="fas fa-camera"></i> <span id="ss-text">Screenshot ထည့်ပါ</span><input type="file" id="ss-input" accept="image/*" style="display:none;" onchange="previewSS(this)"><img id="ss-preview"></label>
+            <div style="display:flex; gap:10px;"><button onclick="closeOrder()" class="btn-cancel" id="txt-btn-cancel">မဝယ်ယူသေးပါ</button><button onclick="sendOrder()" class="btn-confirm" id="txt-btn-confirm">ဝယ်ယူမည်</button></div>
         </div>
     </div>
 </div>
 
 <script>
-    const auth = { id: "09776432409", ps: "lukar123" };
-    let balance = parseInt(localStorage.getItem("lukar_bal")) || 19840;
+    const mlData = {
+        "Game Passes": [{n:"💎 Weekly pass",p:6200},{n:"🤩 Twilight pass",p:32200}],
+        "Diamonds": [{n:"💎 11",p:1000},{n:"💎 22",p:2000},{n:"💎 33",p:2600},{n:"💎 44",p:3500},{n:"💎 56",p:4300},{n:"💎 86",p:5200},{n:"💎 172",p:11000},{n:"💎 257",p:15000},{n:"💎 343",p:21000},{n:"💎 429",p:24400},{n:"💎 515",p:30000},{n:"💎 600",p:35200},{n:"💎 706",p:39500},{n:"💎 963",p:56300},{n:"💎 1049",p:58500},{n:"💎 1135",p:64000},{n:"💎 2195",p:115900},{n:"💎 3688",p:191800},{n:"💎 5532",p:294500},{n:"💎 9288",p:495900}],
+        "Double Dia": [{n:"💎 50 + 50",p:3500},{n:"💎 150 + 150",p:10700},{n:"💎 250 + 250",p:15000},{n:"💎 500 + 500",p:32800}]
+    };
 
-    const pricesData = {
-        'MLBB': [
-            {n:"11 Diamonds", p:550}, {n:"28 Diamonds", p:1350}, {n:"56 Diamonds", p:2700}, {n:"86 Diamonds", p:4100},
-            {n:"172 Diamonds", p:8200}, {n:"257 Diamonds", p:12300}, {n:"Weekly Pass", p:5500},
-            {n:"429 Diamonds", p:20500}, {n:"706 Diamonds", p:32000}, {n:"1412 Diamonds", p:64000},
-            {n:"2195 Diamonds", p:95000}, {n:"5000 Diamonds", p:210000}
+    const pubgData = {
+        "UC Global": [
+            {n:"60 UC",p:3900},{n:"120 UC",p:7800},{n:"180 UC",p:12400},{n:"325 UC",p:19200},
+            {n:"385 UC",p:23100},{n:"660 UC",p:37400},{n:"720 UC",p:43200},{n:"985 UC",p:55600},
+            {n:"1320 UC",p:73800},{n:"1800 UC",p:92500},{n:"3850 UC",p:190000},{n:"8100 UC",p:373000}
         ],
-        'PUBG': [
-            {n:"60 UC", p:3530}, {n:"120 UC", p:7000}, {n:"325 UC", p:18480}, {n:"660 UC", p:36920},
-            {n:"1800 UC", p:92000}, {n:"3850 UC", p:195000}, {n:"8100 UC", p:380000},
-            {n:"RP Upgrade", p:19800}, {n:"Elite Upgrade", p:48000}
+        "Special Packs": [
+            {n:"Prime",p:5000},{n:"Prime Plus",p:45000},{n:"Material Pack",p:15700}
         ]
     };
 
-    window.onload = () => { if(localStorage.getItem("isLogged")) showMain(); };
+    const tgData = [{n:"TG Premium 1 Month",p:25000},{n:"TG Premium 3 Months",p:47000},{n:"TG Premium 1 Year",p:130000}];
+    const tkData = { "TikTok": [{n:"10K View",p:1500},{n:"100K View",p:9000},{n:"1K Follower",p:15000},{n:"1K Like",p:3500}] };
 
-    function doLogin() {
-        if(document.getElementById('login_id').value === auth.id && document.getElementById('login_ps').value === auth.ps) {
-            localStorage.setItem("isLogged", "true"); showMain();
-        } else alert("Invalid ID/PS");
-    }
+    let currentLang = "MY";
+    const langData = {
+        MY: { select: "ဝန်ဆောင်မှုရွေးချယ်ပါ", settings: "ပြင်ဆင်ချက်များ", theme: "အလင်းအမှောင်ပြောင်းရန်", lang: "မြန်မာ / English", history: "ဝယ်ယူသူများ၏မှတ်တမ်း", contact: "Owner ဆီစာပို့ရန်", chat: "စကားပြောကြမယ်", home: "ပင်မ", set: "ပြင်ဆင်ချက်", cancel: "မဝယ်ယူသေးပါ", confirm: "ဝယ်ယူမည်", back: "နောက်သို့" },
+        EN: { select: "Select Service", settings: "Settings", theme: "Dark / Light Mode", lang: "English / Myanmar", history: "History", contact: "Contact Owner", chat: "Chat Group", home: "Home", set: "Setting", cancel: "Cancel", confirm: "Buy Now", back: "Back" }
+    };
 
-    function showMain() {
-        document.getElementById('login-screen').style.display='none';
-        document.getElementById('main-app').style.display='block';
-        updateUI();
-    }
-
-    function doLogout() { localStorage.removeItem("isLogged"); location.reload(); }
-
-    function switchScreen(id) {
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    function switchTab(tab) {
+        document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        document.getElementById(id + '-screen').classList.add('active');
-        if(id !== 'topup') document.getElementById('nav-' + id).classList.add('active');
+        if(tab==='home') { document.getElementById('home-sec').classList.add('active'); document.getElementById('nav-home').classList.add('active'); }
+        else { document.getElementById('setting-sec').classList.add('active'); document.getElementById('nav-setting').classList.add('active'); }
     }
 
-    function showPrices(game) {
-        const container = document.getElementById('items-container');
-        document.getElementById('game-title').innerText = game + " စျေးနှုန်းများ";
-        document.getElementById('price-menu').style.display = 'block';
-        container.innerHTML = "";
-        pricesData[game].forEach(i => {
-            const row = document.createElement('div');
-            row.className = "price-row";
-            row.innerHTML = `<span>${i.n}</span><span style="color:var(--primary); font-weight:bold;">${i.p.toLocaleString()} Ks</span>`;
-            row.onclick = () => {
-                document.getElementById('item_name').innerText = i.n;
-                document.getElementById('item_price').innerText = i.p.toLocaleString() + " Ks";
-                window.selPrice = i.p; window.selName = i.n;
-                document.getElementById('modal-overlay').style.display = 'flex';
-            };
-            container.appendChild(row);
-        });
-        window.scrollTo({top: document.body.scrollHeight, behavior:'smooth'});
+    function toggleDarkMode() { document.body.classList.toggle('light-mode'); }
+
+    function toggleLanguage() {
+        currentLang = (currentLang === "MY") ? "EN" : "MY";
+        document.getElementById('lang-indicator').innerText = currentLang;
+        const d = langData[currentLang];
+        document.getElementById('txt-select-service').innerText = d.select;
+        document.getElementById('txt-settings').innerText = d.settings;
+        document.getElementById('txt-theme').innerText = d.theme;
+        document.getElementById('txt-lang').innerText = d.lang;
+        document.getElementById('txt-history').innerText = d.history;
+        document.getElementById('txt-contact').innerText = d.contact;
+        document.getElementById('txt-chat').innerText = d.chat;
+        document.getElementById('txt-nav-home').innerText = d.home;
+        document.getElementById('txt-nav-setting').innerText = d.set;
+        document.getElementById('txt-btn-cancel').innerText = d.cancel;
+        document.getElementById('txt-btn-confirm').innerText = d.confirm;
+        document.getElementById('txt-back').innerText = d.back;
     }
 
-    function previewFile() {
-        const preview = document.getElementById('preview-img');
-        const file = document.getElementById('file-input').files[0];
-        const reader = new FileReader();
-        reader.onloadend = () => { preview.src = reader.result; preview.style.display = 'block'; document.getElementById('file-text').innerText = "ပုံရွေးချယ်ပြီးပါပြီ"; }
-        if(file) reader.readAsDataURL(file);
+    let selItem = ""; let selPrice = ""; let selCat = "";
+
+    function showPrices(cat) {
+        selCat = cat;
+        document.getElementById('main-home').style.display = 'none';
+        document.getElementById('price-view').style.display = 'block';
+        document.getElementById('view-title').innerText = cat;
+        const list = document.getElementById('items-list'); list.innerHTML = "";
+        
+        if(cat === 'MLBB') { for(let g in mlData) { list.innerHTML += `<div class="sub-group-title">${g}</div>`; renderGrid(mlData[g], list, true); } }
+        else if(cat === 'PUBG') { for(let g in pubgData) { list.innerHTML += `<div class="sub-group-title">${g}</div>`; renderGrid(pubgData[g], list, true); } }
+        else if(cat === 'TELEGRAM') { renderGrid(tgData, list); }
+        else if(cat === 'TIKTOK') { for(let g in tkData) { list.innerHTML += `<div class="sub-group-title">${g}</div>`; renderGrid(tkData[g], list, true); } }
     }
 
-    function processTopup() {
-        const amt = document.getElementById('top-amt').value;
-        const file = document.getElementById('file-input').files[0];
-        if(!amt || !file) return alert("ပမာဏ နှင့် ပြေစာပုံ ထည့်ပေးပါ");
-        alert("ငွေဖြည့်သွင်းမှု တောင်းဆိုချက် ပေးပို့ပြီးပါပြီ။ ခဏအတွင်း ဖြည့်သွင်းပေးပါမည်။");
-        window.open(`https://t.me/official_lukar?text=Deposit Request: ${amt} Ks`, '_blank');
-        switchScreen('settings');
+    function renderGrid(arr, el, append=false) {
+        let html = `<div class="price-grid">`;
+        arr.forEach(i => { html += `<div class="price-card" onclick="openModal('${i.n}', '${i.p}')"><div style="font-size:12px; font-weight:bold;">${i.n}</div><div class="cost">${i.p.toLocaleString()} ကျပ်</div></div>`; });
+        html += `</div>`;
+        if(append) el.innerHTML += html; else el.innerHTML = html;
     }
 
-    function closeModal() { document.getElementById('modal-overlay').style.display = 'none'; }
-
-    function confirmPurchase() {
-        const gid = document.getElementById('game_id').value;
-        if(!gid || !document.getElementById('confirm_check').checked) return alert("Fill ID & Confirm");
-        if(balance < window.selPrice) return alert("Low Balance");
-        balance -= window.selPrice; localStorage.setItem("lukar_bal", balance);
-        updateUI(); closeModal();
-        window.open(`https://t.me/official_lukar?text=New Order: ${window.selName}%0AID: ${gid}`, '_blank');
+    function openModal(n, p) {
+        selItem = n; selPrice = p;
+        document.getElementById('m-n').innerText = n;
+        document.getElementById('m-p').innerText = parseInt(p).toLocaleString() + " ကျပ်";
+        document.getElementById('target-srv').style.display = (selCat==='MLBB') ? 'block' : 'none';
+        document.getElementById('modal-overlay').style.display = 'flex';
     }
 
-    function updateUI() {
-        const b = balance.toLocaleString();
-        document.getElementById('header-bal').innerText = b;
-        document.getElementById('set-bal').innerText = b;
-        document.getElementById('modal-bal').innerText = b;
+    function previewSS(input) { if (input.files && input.files[0]) { const reader = new FileReader(); reader.onload = e => { document.getElementById('ss-preview').src = e.target.result; document.getElementById('ss-preview').style.display = 'block'; }; reader.readAsDataURL(input.files[0]); } }
+    function closeOrder() { document.getElementById('modal-overlay').style.display = 'none'; }
+    function goHome() { document.getElementById('main-home').style.display = 'block'; document.getElementById('price-view').style.display = 'none'; }
+    function copyNum(n, t) { navigator.clipboard.writeText(n); alert(t + " Copied!"); }
+
+    function sendOrder() {
+        const id = document.getElementById('target-id').value;
+        const srv = document.getElementById('target-srv').value;
+        if(id.length < 3) return alert("ID ဖြည့်ပါ");
+        if(!document.getElementById('ss-input').files[0]) return alert("ငွေလွှဲ Screenshot ထည့်ပါ");
+        const msg = `--- NEW ORDER ---%0ACategory: ${selCat}%0AItem: ${selItem}%0APrice: ${selPrice} ကျပ်%0AID: ${id} ${srv?'('+srv+')':''}`;
+        window.location.href = `https://t.me/offical_Lukar?text=${msg}`;
     }
 </script>
 </body>
