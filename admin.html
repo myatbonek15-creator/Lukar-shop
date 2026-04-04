@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>𝐊𝐄𝐕𝐈𝐍 𝐒𝐓𝐎𝐑𝐄 - Admin Dashboard</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+Myanmar:wght@300;400;700&display=swap');
+        
+        body { 
+            font-family: 'Noto Sans Myanmar', sans-serif; 
+            background-color: #020617; 
+            color: #e2e8f0; 
+        }
+        .game-font { font-family: 'Orbitron', sans-serif; }
+        
+        input, select, textarea {
+            background: #0f172a !important;
+            border: 1px solid #1e293b !important;
+            color: white !important;
+            padding: 12px !important;
+            border-radius: 12px !important;
+            width: 100%;
+            outline: none;
+        }
+        input:focus { border-color: #3b82f6 !important; }
+        
+        .glass-card {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body class="p-4 md:p-10">
+
+    <div id="login-overlay" class="fixed inset-0 z-[100] bg-black flex items-center justify-center p-6">
+        <div class="glass-card p-8 rounded-3xl w-full max-w-md text-center">
+            <h1 class="game-font text-3xl font-black mb-6 text-blue-400 text-sm">ADMIN LOGIN</h1>
+            <input type="password" id="admin-pass" placeholder="Password ရိုက်ပါ..." class="mb-4">
+            <button onclick="checkPass()" class="w-full bg-blue-600 py-4 rounded-xl font-bold uppercase tracking-widest text-sm">Login</button>
+            <p id="error" class="text-red-500 mt-4 text-xs hidden">Password မှားနေပါသည်!</p>
+        </div>
+    </div>
+
+    <div class="max-w-4xl mx-auto">
+        <header class="flex justify-between items-center mb-10">
+            <div>
+                <h1 class="game-font text-3xl font-black text-blue-400 text-sm">KEVIN <span class="text-white italic">ADMIN</span></h1>
+                <p class="text-gray-500 text-xs mt-1">အကောင့်အသစ်များ တင်ရန်နေရာ</p>
+            </div>
+            <button onclick="location.reload()" class="bg-white/5 p-3 rounded-xl hover:bg-white/10 transition">
+                <i class="fa-solid fa-rotate"></i>
+            </button>
+        </header>
+
+        <div class="glass-card p-8 rounded-[2.5rem] shadow-2xl">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-2">
+                    <label class="text-xs font-bold text-gray-400 uppercase ml-2 tracking-widest">Account ID / Code</label>
+                    <input type="text" id="acc-id" placeholder="ဥပမာ- KEVIN-001">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-xs font-bold text-gray-400 uppercase ml-2 tracking-widest">Price (Ks)</label>
+                    <input type="text" id="acc-price" placeholder="ဥပမာ- 55,000">
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-xs font-bold text-gray-400 uppercase ml-2 tracking-widest">Rank</label>
+                    <input type="text" id="acc-rank" placeholder="ဥပမာ- Mythical Glory">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-xs font-bold text-gray-400 uppercase ml-2 tracking-widest">Login Method</label>
+                    <input type="text" id="acc-login" placeholder="ဥပမာ- Moonton (Gmail ပေးမည်)">
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-xs font-bold text-gray-400 uppercase ml-2 tracking-widest">Total Heroes</label>
+                    <input type="number" id="acc-heroes" placeholder="ဥပမာ- 120">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-xs font-bold text-gray-400 uppercase ml-2 tracking-widest">Total Skins</label>
+                    <input type="number" id="acc-skins" placeholder="ဥပမာ- 300">
+                </div>
+
+                <div class="md:col-span-2 space-y-2">
+                    <label class="text-xs font-bold text-gray-400 uppercase ml-2 tracking-widest">Image Links (Comma ဖြင့်ခြားပါ)</label>
+                    <textarea id="acc-images" rows="3" placeholder="https://link1.jpg, https://link2.jpg"></textarea>
+                    <p class="text-[10px] text-gray-500 italic ml-2">* ပုံတစ်ပုံထက်ပိုလျှင် ကော်မာ ( , ) ခံပြီးထည့်ပါ။</p>
+                </div>
+            </div>
+
+            <button onclick="uploadToFirebase()" id="btn-submit" class="w-full bg-blue-600 mt-10 py-5 rounded-2xl font-black text-lg uppercase tracking-[5px] hover:bg-blue-500 shadow-xl shadow-blue-900/20 transition-all active:scale-95">
+                PUBLISH ACCOUNT <i class="fa-solid fa-cloud-arrow-up ml-2"></i>
+            </button>
+        </div>
+
+        <p class="text-center mt-10 text-gray-600 text-xs">Logged in as Administrator | Security Level: High</p>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, set, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        // Firebase Configuration (သင့်ရဲ့ Database နဲ့ အတူတူပါပဲ)
+        const firebaseConfig = {
+            apiKey: "AIzaSyCo1yi0zDkr52K89G6UHPtIbHdaicWaurc",
+            authDomain: "kevingameshop-cb79c.firebaseapp.com",
+            databaseURL: "https://kevingameshop-cb79c-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "kevingameshop-cb79c",
+            storageBucket: "kevingameshop-cb79c.firebasestorage.app",
+            messagingSenderId: "1073950822440",
+            appId: "1:1073950822440:web:55f407a2cb4efc63e6251d"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Password စစ်ဆေးခြင်း
+        window.checkPass = () => {
+            const pass = document.getElementById('admin-pass').value;
+            // Password ကို 'kevin123' လို့ သတ်မှတ်ထားပါတယ် (စိတ်ကြိုက်ပြင်နိုင်သည်)
+            if (pass === 'kevin123') {
+                document.getElementById('login-overlay').style.display = 'none';
+            } else {
+                document.getElementById('error').classList.remove('hidden');
+            }
+        };
+
+        // Firebase သို့ အချက်အလက်ပို့ခြင်း
+        window.uploadToFirebase = async () => {
+            const id = document.getElementById('acc-id').value;
+            const price = document.getElementById('acc-price').value;
+            const rank = document.getElementById('acc-rank').value;
+            const login = document.getElementById('acc-login').value;
+            const heroes = document.getElementById('acc-heroes').value;
+            const skins = document.getElementById('acc-skins').value;
+            const images = document.getElementById('acc-images').value;
+
+            if (!id || !price || !images) {
+                alert("ကျေးဇူးပြု၍ လိုအပ်သော အချက်အလက်များ အကုန်ဖြည့်ပါ!");
+                return;
+            }
+
+            const btn = document.getElementById('btn-submit');
+            btn.innerHTML = "UPLOADING...";
+            btn.disabled = true;
+
+            try {
+                const accountsRef = ref(db, 'accounts');
+                const newAccountRef = push(accountsRef); // အလိုအလျောက် Key ထုတ်ပေးမည်
+                
+                await set(newAccountRef, {
+                    id: id,
+                    price: price,
+                    rank: rank,
+                    login: login,
+                    heroes: heroes,
+                    skins: skins,
+                    images: images,
+                    sold: false
+                });
+
+                alert("Account အောင်မြင်စွာ တင်ပြီးပါပြီ!");
+                location.reload(); // Form ကို ရှင်းလိုက်ရန်
+            } catch (error) {
+                console.error(error);
+                alert("အမှားတစ်ခု ဖြစ်သွားသည်- " + error.message);
+                btn.innerHTML = "PUBLISH ACCOUNT";
+                btn.disabled = false;
+            }
+        };
+    </script>
+</body>
+</html>
