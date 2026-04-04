@@ -7,119 +7,48 @@
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+Myanmar:wght@300;400;700&display=swap');
         
-        :root {
-            --primary: #00d2ff;
-            --secondary: #ffcc00;
-            --bg-dark: #02040a;
-        }
+        :root { --primary: #00d2ff; --secondary: #ffcc00; --bg-dark: #02040a; }
 
-        body { 
-            font-family: 'Noto Sans Myanmar', sans-serif; 
-            background-color: var(--bg-dark); 
-            color: #e2e8f0; 
-            overflow-x: hidden;
-            margin: 0;
-        }
-
-        /* 1. Preloader Style */
-        #preloader {
-            position: fixed;
-            inset: 0;
-            background: #000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            transition: opacity 0.8s ease;
-        }
-        .loader-logo {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 3rem;
-            font-weight: 900;
-            color: white;
-            letter-spacing: 10px;
-            text-shadow: 0 0 20px var(--primary);
-            animation: pulse-glow 2s infinite;
-        }
-        @keyframes pulse-glow {
-            0%, 100% { opacity: 0.5; filter: blur(2px); }
-            50% { opacity: 1; filter: blur(0px); }
-        }
-
+        body { font-family: 'Noto Sans Myanmar', sans-serif; background-color: var(--bg-dark); color: #e2e8f0; margin: 0; overflow-x: hidden; }
         .game-font { font-family: 'Orbitron', sans-serif; }
         .mm-bold { font-weight: 700; }
 
         .screen { display: none; min-height: 100vh; }
         .screen.active { display: flex; flex-direction: column; }
 
-        /* 2. Welcome Animation Style */
-        .fade-up { animation: fadeUp 1s ease forwards; }
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .premium-card { 
-            background: linear-gradient(145deg, #0f172a 0%, #020617 100%);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: 0.4s;
-        }
-        .premium-card:hover { 
-            border-color: var(--primary);
-            box-shadow: 0 0 25px rgba(0, 210, 255, 0.15);
-        }
+        #preloader { position: fixed; inset: 0; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: 0.8s; }
+        
+        .swiper { width: 100%; height: 100%; }
+        .premium-card { background: linear-gradient(145deg, #0f172a 0%, #020617 100%); border: 1px solid rgba(255, 255, 255, 0.05); transition: 0.4s; }
+        .premium-card:hover { border-color: var(--primary); transform: translateY(-5px); }
 
         .btn-gold {
             background: linear-gradient(90deg, #b38728 0%, #fbf5b7 50%, #bf953f 100%);
-            color: #000;
-            font-weight: 800;
-            box-shadow: 0 4px 15px rgba(191, 149, 63, 0.3);
-            transition: 0.3s;
+            color: #000; font-weight: 800; transition: 0.3s;
         }
-        .btn-gold:hover { transform: scale(1.05); filter: brightness(1.1); }
 
-        .status-badge {
-            padding: 2px 10px;
-            border-radius: 4px;
-            font-size: 10px;
-            font-weight: 800;
-            text-transform: uppercase;
-        }
-        .available { background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid #10b981; }
-        .sold { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid #ef4444; }
+        .status-badge { padding: 2px 10px; border-radius: 4px; font-size: 10px; font-weight: 800; text-transform: uppercase; z-index: 10; }
+        .available { background: rgba(16, 185, 129, 0.8); color: #fff; }
+        .sold { background: rgba(239, 68, 68, 0.8); color: #fff; }
     </style>
 </head>
 <body>
 
     <div id="preloader">
-        <div class="loader-logo">KEVIN</div>
-        <div class="mt-4 h-1 w-48 bg-gray-900 rounded-full overflow-hidden">
-            <div class="h-full bg-blue-500 animate-[loading_2.5s_ease-in-out_forwards]"></div>
-        </div>
-        <style> @keyframes loading { from { width: 0%; } to { width: 100%; } } </style>
+        <div class="game-font text-4xl font-black text-white tracking-[10px] animate-pulse">KEVIN</div>
     </div>
 
     <div id="screen-welcome" class="screen active items-center justify-center text-center px-6 relative overflow-hidden">
-        <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070" class="absolute inset-0 w-full h-full object-cover grayscale-[40%] scale-110">
-        <div class="bg-black/70 absolute inset-0"></div>
-        
-        <div class="relative z-10 fade-up">
-            <h1 class="game-font text-8xl md:text-[10rem] font-black mb-4 text-white uppercase italic tracking-tighter drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
-                𝐊𝐄𝐕𝐈𝐍
-            </h1>
-            <div class="h-1.5 w-32 bg-primary mx-auto mb-8 rounded-full shadow-[0_0_15px_#00d2ff]"></div>
-            
-            <p id="welcome-text" class="max-w-md mx-auto mb-10 text-blue-200 text-xl mm-bold min-h-[3rem]">
-                </p>
-
-            <button onclick="switchScreen('screen-list')" class="btn-gold px-14 py-5 rounded-sm mm-bold uppercase tracking-widest text-lg">
-                အခုပဲ ကြည့်မည် <i class="fa-solid fa-bolt-lightning ml-2"></i>
-            </button>
+        <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070" class="absolute inset-0 w-full h-full object-cover grayscale-[50%] opacity-40 scale-110">
+        <div class="relative z-10">
+            <h1 class="game-font text-8xl md:text-[10rem] font-black text-white italic tracking-tighter drop-shadow-2xl">𝐊𝐄𝐕𝐈𝐍</h1>
+            <p id="welcome-text" class="mb-10 text-blue-200 text-xl mm-bold min-h-[3rem]"></p>
+            <button onclick="switchScreen('screen-list')" class="btn-gold px-14 py-5 rounded-sm mm-bold uppercase tracking-widest text-lg">ဝင်မည်</button>
         </div>
     </div>
 
@@ -131,34 +60,23 @@
         </nav>
 
         <div class="container mx-auto px-5 py-10">
-            <div class="flex items-center gap-3 mb-8">
-                <div class="h-8 w-1.5 bg-primary"></div>
-                <h2 class="text-3xl font-bold text-white mm-bold tracking-tight">ရောင်းရန်ရှိသော အကောင့်များ</h2>
-            </div>
-            <div id="account-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+            <h2 class="text-2xl font-bold text-white mb-8 mm-bold border-l-4 border-primary pl-4">ရောင်းရန်ရှိသော အကောင့်များ</h2>
+            <div id="account-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
         </div>
     </div>
 
     <div id="screen-detail" class="screen bg-[#02040a]">
-        <nav class="bg-black/80 backdrop-blur-md border-b border-white/5 flex justify-between items-center p-5 sticky top-0 z-50">
-            <button onclick="switchScreen('screen-list')" class="text-gray-400 hover:text-white flex items-center gap-2 font-bold mm-bold">
-                <i class="fa-solid fa-arrow-left"></i> နောက်သို့
-            </button>
-            <span class="game-font text-xs tracking-widest text-primary uppercase">Details</span>
-            <div class="w-12"></div>
+        <nav class="bg-black/80 border-b border-white/5 flex justify-between items-center p-5 sticky top-0 z-50">
+            <button onclick="switchScreen('screen-list')" class="text-gray-400 mm-bold"><i class="fa-solid fa-arrow-left"></i> နောက်သို့</button>
         </nav>
-        <div id="detail-content" class="container mx-auto px-5 py-10 max-w-5xl"></div>
+        <div id="detail-content" class="container mx-auto px-5 py-10 max-w-6xl"></div>
     </div>
 
-    <div class="fixed bottom-5 right-5 z-[100]">
-        <button onclick="adminAddAccount()" class="bg-primary text-black w-14 h-14 rounded-full shadow-[0_0_20px_rgba(0,210,255,0.5)] flex items-center justify-center text-2xl font-bold hover:rotate-90 transition-all">
-            <i class="fa-solid fa-plus"></i>
-        </button>
-    </div>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, onValue, push, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCo1yi0zDkr52K89G6UHPtIbHdaicWaurc",
@@ -173,30 +91,19 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // 1. Loading Logic
+        // Preloader & Typewriter
         window.addEventListener('load', () => {
             setTimeout(() => {
-                const loader = document.getElementById('preloader');
-                loader.style.opacity = '0';
-                setTimeout(() => { 
-                    loader.style.display = 'none'; 
-                    startWelcomeText(); // စာစရိုက်ရန်
-                }, 800);
-            }, 2500); // ၂.၅ စက္ကန့်ကြာရင် Loading ပျောက်မယ်
+                document.getElementById('preloader').style.opacity = '0';
+                setTimeout(() => { document.getElementById('preloader').style.display = 'none'; startWelcomeText(); }, 800);
+            }, 2000);
         });
 
-        // 2. Typewriter Effect
         function startWelcomeText() {
-            const text = "စိတ်ချရသော MLBB အကောင့်များ ကို ဤနေရာမှာပင် စိတ်ကြိုက်ရွေးချယ်လိုက်ပါ။";
+            const text = "စိတ်ချရသော MLBB အကောင့်များ စုစည်းမှု";
             let i = 0;
             const element = document.getElementById('welcome-text');
-            function type() {
-                if (i < text.length) {
-                    element.innerHTML += text.charAt(i);
-                    i++;
-                    setTimeout(type, 50);
-                }
-            }
+            function type() { if (i < text.length) { element.innerHTML += text.charAt(i); i++; setTimeout(type, 50); } }
             type();
         }
 
@@ -206,86 +113,77 @@
             window.scrollTo(0,0);
         };
 
+        // Real-time Data Listen Only (No Write Function)
         onValue(ref(db, 'accounts'), (snapshot) => {
             const data = snapshot.val();
             const grid = document.getElementById('account-grid');
-            if (!data) {
-                grid.innerHTML = `<p class="text-gray-500 col-span-full text-center py-20">အကောင့်မရှိသေးပါ။ '+' ကိုနှိပ်ပြီး အကောင့်သစ်တင်ပါ။</p>`;
-                return;
-            }
+            if (!data) { grid.innerHTML = `<p class="col-span-full text-center py-20 text-gray-500">အကောင့်များ မရှိသေးပါ။</p>`; return; }
+            
             const list = Object.entries(data).map(([key, value]) => ({...value, dbKey: key}));
-            grid.innerHTML = list.map(acc => `
-                <div class="premium-card rounded-2xl overflow-hidden cursor-pointer" onclick='showAccountDetail(${JSON.stringify(acc)})'>
-                    <div class="relative h-56">
-                        <img src="${acc.images[0]}" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent"></div>
-                        <div class="absolute top-4 left-4">
-                            <span class="status-badge ${acc.sold ? 'sold' : 'available'}">${acc.sold ? 'Sold Out' : acc.rank}</span>
+            grid.innerHTML = list.map(acc => {
+                const imgArray = Array.isArray(acc.images) ? acc.images : (acc.images ? acc.images.split(',') : []);
+                
+                return `
+                <div class="premium-card rounded-3xl overflow-hidden shadow-xl">
+                    <div class="relative h-72">
+                        <div class="absolute top-4 left-4 status-badge ${acc.sold ? 'sold' : 'available'}">${acc.sold ? 'Sold' : acc.rank}</div>
+                        <div class="swiper mySwiper-${acc.id.replace(/\s+/g, '')}">
+                            <div class="swiper-wrapper">
+                                ${imgArray.map(img => `<div class="swiper-slide"><img src="${img.trim()}" class="w-full h-full object-cover"></div>`).join('')}
+                            </div>
+                            <div class="swiper-pagination"></div>
                         </div>
                     </div>
                     <div class="p-6">
                         <div class="flex justify-between items-center mb-4">
-                            <span class="game-font text-xs text-gray-400 tracking-widest">${acc.id}</span>
+                            <span class="game-font text-gray-400 text-xs">${acc.id}</span>
                             <span class="text-secondary font-black text-xl">${acc.price} Ks</span>
                         </div>
-                        <div class="grid grid-cols-2 gap-3 text-[11px] font-bold">
-                            <div class="bg-blue-500/5 p-2.5 rounded-lg text-center border border-blue-500/10 text-blue-400">HEROES: ${acc.heroes}</div>
-                            <div class="bg-yellow-500/5 p-2.5 rounded-lg text-center border border-yellow-500/10 text-yellow-400">SKINS: ${acc.skins}</div>
-                        </div>
+                        <button onclick='showAccountDetail(${JSON.stringify({...acc, images: imgArray})})' class="w-full bg-blue-600/20 border border-blue-500/30 text-primary py-3 rounded-xl font-bold hover:bg-blue-600 hover:text-white transition uppercase text-xs tracking-widest">အသေးစိတ်ကြည့်မည်</button>
                     </div>
                 </div>
-            `).join('');
+                `;
+            }).join('');
+
+            list.forEach(acc => {
+                new Swiper(`.mySwiper-${acc.id.replace(/\s+/g, '')}`, {
+                    pagination: { el: ".swiper-pagination", clickable: true },
+                });
+            });
         });
 
         window.showAccountDetail = (acc) => {
             const content = document.getElementById('detail-content');
             content.innerHTML = `
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 fade-up">
-                    <div class="lg:col-span-7">
-                        <img src="${acc.images[0]}" class="w-full rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/5">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                    <div class="h-[400px] md:h-[500px] rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl">
+                        <div class="swiper detailSwiper">
+                            <div class="swiper-wrapper">
+                                ${acc.images.map(img => `<div class="swiper-slide"><img src="${img.trim()}" class="w-full h-full object-cover"></div>`).join('')}
+                            </div>
+                            <div class="swiper-button-next"></div>
+                            <div class="swiper-button-prev"></div>
+                            <div class="swiper-pagination"></div>
+                        </div>
                     </div>
-                    <div class="lg:col-span-5 flex flex-col justify-center">
-                        <div class="mb-8">
-                            <span class="status-badge ${acc.sold ? 'sold' : 'available'} mb-4 inline-block text-xs py-1.5 px-4">${acc.sold ? 'ရောင်းပြီး' : 'ရောင်းရန်ရှိသည်'}</span>
-                            <h2 class="game-font text-6xl font-black text-white mb-3 tracking-tighter uppercase italic">${acc.id}</h2>
-                            <div class="text-secondary text-4xl font-black">${acc.price} <span class="text-sm">MMK</span></div>
+                    <div class="flex flex-col justify-center">
+                        <h2 class="game-font text-5xl font-black text-white mb-2 italic uppercase">${acc.id}</h2>
+                        <div class="text-secondary text-4xl font-black mb-8">${acc.price} Ks</div>
+                        <div class="bg-white/5 p-8 rounded-3xl space-y-4 mb-8 border border-white/5">
+                            <div class="flex justify-between border-b border-white/5 pb-2"><span>Rank</span><span class="text-white font-bold">${acc.rank}</span></div>
+                            <div class="flex justify-between border-b border-white/5 pb-2"><span>Heroes</span><span class="text-white font-bold">${acc.heroes}</span></div>
+                            <div class="flex justify-between border-b border-white/5 pb-2"><span>Skins</span><span class="text-white font-bold">${acc.skins}</span></div>
+                            <div class="flex justify-between"><span>Login</span><span class="text-green-400 font-bold">${acc.login}</span></div>
                         </div>
-                        <div class="bg-white/5 backdrop-blur-xl border border-white/10 p-8 rounded-[2rem] space-y-6 mb-10">
-                            <div class="flex justify-between border-b border-white/5 pb-4"><span class="text-gray-400">Rank Tier</span><span class="text-white font-bold">${acc.rank}</span></div>
-                            <div class="flex justify-between border-b border-white/5 pb-4"><span class="text-gray-400">Heroes</span><span class="text-white font-bold">${acc.heroes}</span></div>
-                            <div class="flex justify-between border-b border-white/5 pb-4"><span class="text-gray-400">Skins Count</span><span class="text-white font-bold">${acc.skins}</span></div>
-                            <div class="flex justify-between"><span class="text-gray-400">Login Security</span><span class="text-green-400 font-bold">${acc.login}</span></div>
-                        </div>
-                        <a href="${acc.sold ? '#' : 'https://t.me/Kevindash890'}" target="_blank" 
-                           class="${acc.sold ? 'bg-gray-800 text-gray-500 cursor-not-allowed' : 'btn-gold'} py-6 text-center rounded-2xl mm-bold uppercase text-lg shadow-2xl">
-                            ${acc.sold ? 'SOLD OUT' : 'ဝယ်ယူရန် ဆက်သွယ်မည်'}
-                        </a>
+                        <a href="https://t.me/Kevindash890" target="_blank" class="btn-gold py-6 text-center rounded-2xl mm-bold uppercase text-xl">ဆက်သွယ်ဝယ်ယူမည်</a>
                     </div>
                 </div>
             `;
             switchScreen('screen-detail');
-        };
-
-        window.adminAddAccount = () => {
-            const password = prompt("Admin Password ကို ရိုက်ထည့်ပါ:");
-            if (password !== "kevin123") {
-                alert("Password မှားယွင်းနေပါသည်။");
-                return;
-            }
-
-            const id = prompt("Account ID (ဥပမာ- KV-001):");
-            const price = prompt("Price (Ks):");
-            const rank = prompt("Rank:");
-            const heroes = prompt("Heroes အရေအတွက်:");
-            const skins = prompt("Skins အရေအတွက်:");
-            const imgUrl = prompt("ပုံ Link (Direct URL):");
-            
-            if (id && price && imgUrl) {
-                const newRef = push(ref(db, 'accounts'));
-                set(newRef, {
-                    id, price, rank, heroes, skins, login: "Moonton", sold: false, images: [imgUrl]
-                }).then(() => alert("အောင်မြင်စွာ တင်ပြီးပါပြီ!"));
-            }
+            new Swiper(".detailSwiper", { 
+                pagination: { el: ".swiper-pagination", dynamicBullets: true },
+                navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" }
+            });
         };
     </script>
 </body>
